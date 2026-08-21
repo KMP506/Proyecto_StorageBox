@@ -8,6 +8,8 @@ package Modelo.excepciones;
  *
  * @author efrai
  */
-public class NegocioException {
-    
+public class NegocioException extends Exception {
+    public NegocioException(String mensaje){
+        super(mensaje);
+    }
 }

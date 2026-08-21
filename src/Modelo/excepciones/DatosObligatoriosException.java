@@ -8,6 +8,11 @@ package Modelo.excepciones;
  *
  * @author efrai
  */
-public class DatosObligatoriosException {
-    
+public class DatosObligatoriosException extends NegocioException {
+    public DatosObligatoriosException(){
+        super("Debe ingresar todos los datos obligatorios.");
+    }
+    public DatosObligatoriosException(String campo ){
+        super("El campo " + campo + " es obligatorio.");
+    }
 }
