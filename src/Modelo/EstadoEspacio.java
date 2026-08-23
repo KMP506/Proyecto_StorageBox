@@ -9,5 +9,6 @@ package Modelo;
  * @author kevin
  */
 public enum EstadoEspacio {
-    
+    Disponible,
+    Ocupado;
 }

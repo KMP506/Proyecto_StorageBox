@@ -9,5 +9,8 @@ package Modelo;
  * @author kevin
  */
 public enum EstadoContrato {
-    
+    Pendiente,
+    Activo,
+    Finalizado,
+    Cancelado;
 }
