@@ -9,5 +9,5 @@ package Modelo;
  * @author kevin
  */
 public interface Cobrable {
-    
+    double calcularMonto();
 }

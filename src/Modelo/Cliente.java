@@ -4,10 +4,48 @@
  */
 package Modelo;
 
+import java.time.LocalDate;
+import java.time.Period;
+
 /**
  *
  * @author kevin
  */
-public class Cliente {
+public class Cliente extends Persona{
+    private LocalDate fechaNacimiento;
+    private String correoElectronico;
+    
+    public Cliente(String id, String nombreCompleto, String telefono,
+            LocalDate fechaNacimiento, String correoElectronico){
+        super(id,nombreCompleto, telefono);
+        this.fechaNacimiento = fechaNacimiento;
+        this.correoElectronico = correoElectronico;
+    }
+    
+    
+    public LocalDate getFechaNacimiento(){
+        return this.fechaNacimiento;
+    }
+    
+    public String getCorreoElectronico(){
+        return this.correoElectronico;
+    }
+    
+    public void setFechaNacimiento(){
+        this.fechaNacimiento = fechaNacimiento;
+    }
+    
+    public void setCorreoElectronico(){
+        this.correoElectronico = correoElectronico;
+    }
+    
+    public int calcularEdad(){
+        return Period.between(fechaNacimiento, LocalDate.now()).getYears();
+    }
+
+    @Override
+    public String mostrarResumen() {
+       return nombreCompleto + "("+id+")-"+calcularEdad()+"años";
+    }
     
 }
