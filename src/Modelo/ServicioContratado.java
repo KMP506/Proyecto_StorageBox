@@ -25,7 +25,7 @@ public class ServicioContratado implements Cobrable {
         return this.cantidad;
     }
     
-    public void setCantidad(){
+    public void setCantidad(int cantidad){
         this.cantidad = cantidad;
     }
 
