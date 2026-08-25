@@ -8,6 +8,7 @@ import Modelo.Espacio;
 import java.util.HashMap;
 import Modelo.EstadoEspacio;
 import Modelo.excepciones.EspacioOcupadoException;
+import Modelo.TipoEspacio;
 
 /**
  *
@@ -48,5 +49,21 @@ public class GestorEspacios {
         }
         espacios.remove(numeroEspacio);
         return true;
+    }
+    
+    public boolean actualizar(String numeroEspacio, TipoEspacio tipo, double tamanoM2, double precioMensual){
+        
+        Espacio espacio= buscar(numeroEspacio);
+        if(espacio!= null){
+            espacio.setTipo(tipo);
+            espacio.setTamanoM2(tamanoM2);
+            espacio.setPrecioMensual(precioMensual);
+            return true;
+        }
+        return false;
+    }
+    
+    public HashMap<String, Espacio> getEspacios(){
+        return espacios;
     }
 }
