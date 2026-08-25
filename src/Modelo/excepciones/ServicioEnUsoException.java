@@ -8,6 +8,8 @@ package Modelo.excepciones;
  *
  * @author efrai
  */
-public class ServicioEnUsoException {
-    
+public class ServicioEnUsoException extends NegocioException {
+  public ServicioEnUsoException(String codigo) {
+     super("No se puede eliminar el servicio con código" +codigo +" porque está asociado a un contrato.");
+    }
 }

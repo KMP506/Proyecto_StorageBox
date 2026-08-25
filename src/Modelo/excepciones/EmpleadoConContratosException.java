@@ -8,6 +8,9 @@ package Modelo.excepciones;
  *
  * @author efrai
  */
-public class EmpleadoConContratosException {
-    
+public class EmpleadoConContratosException extends NegocioException {
+  public EmpleadoConContratosException(String identificacion) {
+     super("No se puede eliminar el empleado con identificación "+ identificacion
+   + " porque tiene contratos asociados.");
+    }
 }

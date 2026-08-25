@@ -8,6 +8,9 @@ package Modelo.excepciones;
  *
  * @author efrai
  */
-public class ClienteConContratosException {
-    
+public class ClienteConContratosException extends NegocioException{
+    public ClienteConContratosException(String identificacion) {
+      super("No se puede eliminar el cliente con identificación "+ identificacion
+          + " porque tiene contratos pendientes o activos.");
+    }
 }
