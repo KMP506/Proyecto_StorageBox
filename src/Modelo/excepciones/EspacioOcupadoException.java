@@ -8,6 +8,8 @@ package Modelo.excepciones;
  *
  * @author efrai
  */
-public class EspacioOcupadoException {
-    
+public class EspacioOcupadoException extends NegocioException {
+    public EspacioOcupadoException (String numeroEspacio){
+        super("No se puede eliminar el espacion numero"+numeroEspacio+"porque se encuentra ocupado");
+    }
 }
