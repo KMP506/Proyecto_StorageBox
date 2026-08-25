@@ -31,7 +31,7 @@ public class Cliente extends Persona{
         return this.correoElectronico;
     }
 
-    public void setCorreoElectronico(){
+    public void setCorreoElectronico(String correoElectronico){
         this.correoElectronico = correoElectronico;
     }
     

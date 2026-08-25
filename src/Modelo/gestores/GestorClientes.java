@@ -31,4 +31,28 @@ public class GestorClientes {
         }
         return null;
     }
+    public boolean actualizar(String id, String nombre, String telefono, String correo){
+        Cliente cliente= buscar(id);
+        
+        if(cliente !=null){
+            cliente.setNombreCompleto(nombre);
+            cliente.setTelefono(telefono);
+            cliente.setCorreoElectronico(correo);
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean eliminar(String id){
+        Cliente cliente=buscar(id);
+        
+        if(cliente!=null){
+            clientes.remove(cliente);
+            return true;
+        }
+        return false;
+    }
+    public ArrayList<Cliente> getClientes(){
+        return clientes;
+    }
 }
