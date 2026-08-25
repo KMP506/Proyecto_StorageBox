@@ -8,6 +8,29 @@ package Modelo;
  *
  * @author kevin
  */
-public class ServicioContratado {
+public class ServicioContratado implements Cobrable {
+    private ServicioAdicional servicio;
+    private int cantidad;
     
+    public ServicioContratado(ServicioAdicional servicio, int cantidad){
+        this.servicio = servicio;
+        this.cantidad = cantidad;
+    }
+    
+    public ServicioAdicional getServicio(){
+        return this.servicio;
+    }
+    
+    public int getCantidad(){
+        return this.cantidad;
+    }
+    
+    public void setCantidad(){
+        this.cantidad = cantidad;
+    }
+
+    @Override
+    public double calcularMonto() {
+       return servicio.getPrecio()*cantidad;
+    }
 }
