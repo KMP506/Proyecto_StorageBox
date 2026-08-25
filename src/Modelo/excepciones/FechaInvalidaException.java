@@ -8,6 +8,11 @@ package Modelo.excepciones;
  *
  * @author efrai
  */
-public class FechaInvalidaException {
-    
+public class FechaInvalidaException extends NegocioException {
+    public FechaInvalidaException(){
+        super("La fecha ingresada no es valida.");
+    }
+    public FechaInvalidaException(String mensaje){
+        super(mensaje);
+    }
 }
