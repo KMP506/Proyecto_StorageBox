@@ -31,9 +31,15 @@ public abstract class Persona {
         return this.telefono;
     }
     
-    public void setTelefono(){
+    public void setTelefono(String telefono){
         this.telefono = telefono;
     }
+
+    public void setNombreCompleto(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
+    }
+    
+    
     
     public abstract String mostrarResumen();
 }
