@@ -8,6 +8,9 @@ package Modelo.excepciones;
  *
  * @author efrai
  */
-public class EspacioNoDisponibleException {
-    
+public class EspacioNoDisponibleException extends NegocioException {
+    public EspacioNoDisponibleException(String numeroEspacio) {
+        super("El espacio número " + numeroEspacio
+          + " no está disponible durante el periodo seleccionado.");
+    }
 }
