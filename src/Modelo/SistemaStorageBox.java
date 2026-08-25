@@ -4,10 +4,18 @@
  */
 package Modelo;
 
+import Modelo.gestores.GestorClientes;
+
 /**
  *
  * @author kevin
  */
 public class SistemaStorageBox {
-    
+     private GestorClientes gestorClientes;
+    public SistemaStorageBox() {
+        gestorClientes = new GestorClientes();
+    }
+    public GestorClientes getGestorClientes() {
+        return gestorClientes;
+    }
 }
