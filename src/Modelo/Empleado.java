@@ -26,7 +26,7 @@ public class Empleado extends Persona {
         return this.salario;
     }
     
-    public void setPuesto(){
+    public void setPuesto(Puesto puesto){
         this.puesto = puesto;
         this.salario = puesto.getSalarioDefecto();
     }
