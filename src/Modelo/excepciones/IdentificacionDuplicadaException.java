@@ -8,6 +8,10 @@ package Modelo.excepciones;
  *
  * @author efrai
  */
-public class IdentificacionDuplicadaException {
+public class IdentificacionDuplicadaException extends NegocioException{
+    public IdentificacionDuplicadaException(String identificacion){
+    super("Ya existe un registro con la identificación:"
+            + identificacion);
     
+    } 
 }
