@@ -6,6 +6,9 @@ package Modelo.gestores;
 
 import Modelo.Espacio;
 import java.util.HashMap;
+import Modelo.EstadoEspacio;
+import Modelo.excepciones.EspacioOcupadoException;
+
 /**
  *
  * @author isaac
@@ -30,5 +33,20 @@ public class GestorEspacios {
     }
     public Espacio buscar(String numeroEspacio){
         return espacios.get(numeroEspacio);
+    }
+    
+   
+    public boolean eliminar(String numeroEspacio) throws EspacioOcupadoException{
+        
+        Espacio espacio= buscar(numeroEspacio);
+        
+        if(espacio==null){
+            return false;
+        }
+        if(espacio.getEstado()==EstadoEspacio.Ocupado){
+            throw new EspacioOcupadoException(numeroEspacio);
+        }
+        espacios.remove(numeroEspacio);
+        return true;
     }
 }
