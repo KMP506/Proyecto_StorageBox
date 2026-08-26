@@ -27,7 +27,7 @@ public class Cliente extends Persona{
         return this.fechaNacimiento;
     }
     
-    public String getCorreoElectronico(String correoElectronico){
+    public String getCorreoElectronico(){
         return this.correoElectronico;
     }
 
