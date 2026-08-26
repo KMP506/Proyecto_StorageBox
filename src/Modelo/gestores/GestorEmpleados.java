@@ -6,6 +6,7 @@ package Modelo.gestores;
 
 import Modelo.Empleado;
 import java.util.ArrayList;
+import Modelo.Puesto;
 
 /**
  *
@@ -33,5 +34,30 @@ public class GestorEmpleados {
         return null;
     }
     
+    public boolean actualizar(String id, String nombre, String telefono, Puesto puesto){
+        
+        Empleado empleado= buscar(id);
+        
+        if(empleado!= null){
+            empleado.setNombreCompleto(nombre);
+            empleado.setTelefono(telefono);
+            empleado.setPuesto(puesto);
+            return true;
+        }
+        return false;
+    }
     
+    public boolean eliminar(String id){
+        
+        Empleado empleado= buscar(id);
+        if(empleado!= null){
+            empleados.remove(empleado);
+            return true;
+        }
+        return false;
+        
+    }
+    public ArrayList<Empleado> getEmpleados(){
+        return empleados;
+    }
 }
