@@ -49,7 +49,7 @@ public class FrmVentanaBuscarServicio extends javax.swing.JFrame {
         btnBuscar = new javax.swing.JButton();
         btnMostrar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -85,9 +85,17 @@ public class FrmVentanaBuscarServicio extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Codigo", "Nombre", "Descripción", "Precio"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         srcPane.setViewportView(tblServicio);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -194,7 +202,11 @@ public class FrmVentanaBuscarServicio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        String codigo = txtCodigo.getText();
+        String codigo = txtCodigo.getText().trim();
+        if(codigo.isEmpty()){
+        JOptionPane.showMessageDialog(this, "Ingrese un código", "Dato requerido", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
         ServicioAdicional servicio = controladorServicio.buscarServicio(codigo);
 
         if (servicio == null) {
@@ -217,7 +229,12 @@ public class FrmVentanaBuscarServicio extends javax.swing.JFrame {
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         String codigo = JOptionPane.showInputDialog(this, "Ingrese el código del servicio a eliminar:");
 
-        if (codigo == null || codigo.isEmpty()) {
+        if(codigo== null){
+            return;
+        }
+        codigo= codigo.trim();
+        
+        if(codigo.isEmpty()){
             return;
         }
 
@@ -235,22 +252,14 @@ public class FrmVentanaBuscarServicio extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCerrarActionPerformed
     
     private void cargarTabla(ArrayList<ServicioAdicional> servicios) {
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("Código");
-        modelo.addColumn("Nombre");
-        modelo.addColumn("Descripción");
-        modelo.addColumn("Precio");
-
+        DefaultTableModel modelo= (DefaultTableModel) tblServicio.getModel();
+        modelo.setRowCount(0);
+        
         for (ServicioAdicional servicio : servicios) {
             Object[] fila = {
-                servicio.getCodigo(),
-                servicio.getNombre(),
-                servicio.getDescripcion(),
-                servicio.getPrecio()
-            };
+                servicio.getCodigo(), servicio.getNombre(), servicio.getDescripcion(), servicio.getPrecio()};
             modelo.addRow(fila);
         }
-        tblServicio.setModel(modelo);
     }
     
     /**

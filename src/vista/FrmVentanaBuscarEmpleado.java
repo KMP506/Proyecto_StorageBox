@@ -239,9 +239,9 @@ public class FrmVentanaBuscarEmpleado extends javax.swing.JFrame {
     if (eliminado) {
         JOptionPane.showMessageDialog(this, "Empleado eliminado.");
         cargarTabla(controladorEmpleado.listarEmpleados());
-    } else {
+    }else{
         JOptionPane.showMessageDialog(this, "No se encontró un empleado con esa cédula.");
-    }
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
