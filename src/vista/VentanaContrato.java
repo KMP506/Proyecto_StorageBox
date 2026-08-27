@@ -4,23 +4,35 @@
  */
 package vista;
 import Modelo.Cliente;
-import controlador.ControladorPrincipal;
+import controlador.ControladorContrato;
 import javax.swing.JOptionPane;
+import Modelo.Contrato;
+import Modelo.TipoEspacio;
+import Modelo.excepciones.NegocioException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 /**
  *
  * @author efrai
  */
 public class VentanaContrato extends javax.swing.JFrame {
     
+    private ControladorContrato controladorContrato;
+    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VentanaContrato.class.getName());
 
     /**
      * Creates new form VentanaContrato
      */
-    public VentanaContrato() {
+    public VentanaContrato(ControladorContrato controladorContrato) {
         initComponents();
+        controladorContrato= controladorContrato;
     }
 
+    
+    private LocalDate convertirFecha(java.util.Date fecha){
+        return fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -145,6 +157,7 @@ public class VentanaContrato extends javax.swing.JFrame {
         btnBuscarCliente.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnBuscarCliente.setText("Buscar");
         btnBuscarCliente.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnBuscarCliente.addActionListener(this::btnBuscarClienteActionPerformed);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Nombre:");
@@ -152,6 +165,7 @@ public class VentanaContrato extends javax.swing.JFrame {
 
         txtIdCliente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        txtNombreCliente.setEditable(false);
         txtNombreCliente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -264,7 +278,7 @@ public class VentanaContrato extends javax.swing.JFrame {
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtEspacioAsignado, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(100, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -434,6 +448,7 @@ public class VentanaContrato extends javax.swing.JFrame {
 
         btnCrearContrato.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnCrearContrato.setText("Crear");
+        btnCrearContrato.addActionListener(this::btnCrearContratoActionPerformed);
 
         btnCerrar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnCerrar.setText("Cerrar");
@@ -483,12 +498,11 @@ public class VentanaContrato extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -518,6 +532,40 @@ public class VentanaContrato extends javax.swing.JFrame {
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
 dispose();       
     }//GEN-LAST:event_btnCerrarActionPerformed
+
+    private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBuscarClienteActionPerformed
+
+    private void btnCrearContratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearContratoActionPerformed
+        String idCliente= txtIdCliente.getText().trim();
+        String tipoTexto=(String) cboTipoEspacio.getSelectedItem();
+        
+        if(idCliente.isEmpty() || dcFechaInicio.getDate()== null || dcFechaFin.getDate()== null){
+            JOptionPane.showMessageDialog(this, "Debe completar todos los datos del contrato");
+            return;
+        }
+        
+        LocalDate fechaInicio= convertirFecha(dcFechaInicio.getDate());
+        LocalDate fechaFin= convertirFecha(dcFechaFin.getDate());
+        
+        TipoEspacio tipo= TipoEspacio.valueOf(tipoTexto);
+        
+        try{
+            Contrato contrato= controladorContrato.crearContrato(idCliente, tipo, fechaInicio, fechaFin);
+            txtNumeroContrato.setText(String.valueOf(contrato.getNumeroContrato()));
+            txtEstado.setText(contrato.getEstado().toString());
+            txtEspacioAsignado.setText(contrato.getEspacio().getNumeroEspacio());
+            txtSubtotal.setText(String.valueOf(contrato.calcularSubtotal()));
+            txtImpuesto.setText(String.valueOf(contrato.calcularImpuesto()));
+            txtTotal.setText(String.valueOf(contrato.calcularTotal()));
+            
+            JOptionPane.showMessageDialog(this, "Contrato creado correctamente");
+        }catch(NegocioException ex){
+         
+            JOptionPane.showMessageDialog(this, ex.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnCrearContratoActionPerformed
 
     /**
      * @param args the command line arguments
