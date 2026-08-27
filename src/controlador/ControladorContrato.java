@@ -5,6 +5,7 @@
 package controlador;
 
 
+import Modelo.Cliente;
 import Modelo.Contrato;
 import Modelo.SistemaStorageBox;
 import Modelo.TipoEspacio;
@@ -67,6 +68,12 @@ public class ControladorContrato {
     public LinkedList<Contrato> filtrarContratos(int numeroContrato, String cliente, String espacio, LocalDate fecha, EstadoContrato estado) {
 
     return sistema.filtrarContratos(numeroContrato, cliente, espacio, fecha,estado);
+    }
+    public Cliente buscarCliente(String id) {
+        return sistema.buscarCliente(id);
+    }
+    public int cantidadEspaciosDisponibles(TipoEspacio tipo, LocalDate fechaInicio, LocalDate fechaFin) {
+        return sistema.cantidadEspaciosDisponibles(tipo, fechaInicio, fechaFin);
 }
  
 }

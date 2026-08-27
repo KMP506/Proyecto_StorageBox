@@ -68,34 +68,21 @@ public class SistemaStorageBox {
             String telefono, String correo) {
         return gestorClientes.actualizar(id, nombre, telefono, correo);
     }
-    public boolean eliminarCliente(String id)
-            throws ClienteConContratosException {
-        for (Contrato contrato : gestorContratos.getContratos()) {
-            if (contrato.getCliente().getId().equals(id)) {
-                if (contrato.getEstado() == EstadoContrato.Pendiente
-                        || contrato.getEstado() == EstadoContrato.Activo) {
-                    throw new ClienteConContratosException(id);
-                }
-            }
-        }
-        return gestorClientes.eliminar(id);
+    public boolean eliminarCliente(String id)throws ClienteConContratosException {
+        return gestorClientes.eliminar(id, gestorContratos);
     }
-    public void agregarEspacio(Espacio espacio)
-        throws EspacioDuplicadoException {
+    public void agregarEspacio(Espacio espacio) throws EspacioDuplicadoException {
 
-    boolean agregado = gestorEspacios.agregar(espacio);
+    boolean agregado= gestorEspacios.agregar(espacio);
 
     if (agregado == false) {
-        throw new EspacioDuplicadoException(
-                espacio.getNumeroEspacio()
-        );
+        throw new EspacioDuplicadoException(espacio.getNumeroEspacio());
     }
 }
 public Espacio buscarEspacio(String numeroEspacio) {
     return gestorEspacios.buscar(numeroEspacio);
 }
-public boolean actualizarEspacio(String numeroEspacio,
-        TipoEspacio tipo, double tamano, double precio) {
+public boolean actualizarEspacio(String numeroEspacio,TipoEspacio tipo, double tamano, double precio) {
 
     return gestorEspacios.actualizar(
             numeroEspacio, tipo, tamano, precio

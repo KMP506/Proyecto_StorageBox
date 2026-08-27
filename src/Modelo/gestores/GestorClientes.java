@@ -4,7 +4,9 @@
  */
 package Modelo.gestores;
 import Modelo.Cliente;
+import Modelo.excepciones.ClienteConContratosException;
 import java.util.ArrayList;
+import Modelo.gestores.GestorContratos;
 
 /**
  *
@@ -43,15 +45,19 @@ public class GestorClientes {
         return false;
     }
     
-    public boolean eliminar(String id){
+    public boolean eliminar(String id, GestorContratos gestorContratos) throws ClienteConContratosException{
         Cliente cliente=buscar(id);
         
-        if(cliente!=null){
+        if (cliente != null){
+            if (gestorContratos != null && gestorContratos.tieneContratosActivosOPendientes(id)){
+                throw new ClienteConContratosException("No se puede eliminar el cliente con ID " 
+                        + id + " porque posee contratos activos o pendientes.");
+            }
             clientes.remove(cliente);
             return true;
         }
         return false;
-    }
+    }    
     public ArrayList<Cliente> getClientes(){
         return clientes;
     }
