@@ -11,6 +11,9 @@ import Modelo.TipoEspacio;
 import Modelo.excepciones.NegocioException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import Modelo.ServicioContratado;
+import javax.swing.table.DefaultTableModel;
+import Modelo.excepciones.CambioEstadoNoPermitidoException;
 /**
  *
  * @author efrai
@@ -32,6 +35,40 @@ public class VentanaContrato extends javax.swing.JFrame {
     
     private LocalDate convertirFecha(java.util.Date fecha){
         return fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+    private void cargarServicios(Contrato contrato){
+    DefaultTableModel modelo= (DefaultTableModel) tblServicios.getModel();
+
+    modelo.setRowCount(0);
+    for(ServicioContratado sc: contrato.getServicios()) {
+
+        Object[] fila={
+            sc.getServicio().getCodigo(), sc.getServicio().getDescripcion(),
+            sc.getCantidad(), sc.getServicio().getPrecio(), sc.calcularMonto()
+        };
+        modelo.addRow(fila);
+        }
+    }
+    
+    private void limpiarFormulario(){
+
+    txtNumeroContrato.setText("");
+    txtEstado.setText("");
+    txtIdCliente.setText("");
+    txtNombreCliente.setText("");
+    dcFechaInicio.setDate(null);
+    dcFechaFin.setDate(null);
+    cboTipoEspacio.setSelectedIndex(0);
+    txtCantidadDisponible.setText("");
+    txtEspacioAsignado.setText("");
+    txtCodigoServicio.setText("");
+    spnCantidad.setValue(1);
+
+    DefaultTableModel modelo= (DefaultTableModel) tblServicios.getModel();
+    modelo.setRowCount(0);
+    txtSubtotal.setText("");
+    txtImpuesto.setText("");
+    txtTotal.setText("");
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -313,6 +350,7 @@ public class VentanaContrato extends javax.swing.JFrame {
         btnAgregarServicio.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnAgregarServicio.setText("Agregar");
         btnAgregarServicio.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnAgregarServicio.addActionListener(this::btnAgregarServicioActionPerformed);
 
         tblServicios.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         tblServicios.setModel(new javax.swing.table.DefaultTableModel(
@@ -325,7 +363,15 @@ public class VentanaContrato extends javax.swing.JFrame {
             new String [] {
                 "Codigo", "Descripción", "Cantidad", "Precio Unitario", "Subtotal"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblServicios);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -433,18 +479,23 @@ public class VentanaContrato extends javax.swing.JFrame {
 
         btnBuscarContrato.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnBuscarContrato.setText("Buscar");
+        btnBuscarContrato.addActionListener(this::btnBuscarContratoActionPerformed);
 
         btnNuevo.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnNuevo.setText("Nuevo");
+        btnNuevo.addActionListener(this::btnNuevoActionPerformed);
 
         btnActivar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnActivar.setText("Activar");
+        btnActivar.addActionListener(this::btnActivarActionPerformed);
 
         btnFinalizar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnFinalizar.setText("Finalizar");
+        btnFinalizar.addActionListener(this::btnFinalizarActionPerformed);
 
         btnCancelar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(this::btnCancelarActionPerformed);
 
         btnCrearContrato.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnCrearContrato.setText("Crear");
@@ -567,6 +618,121 @@ dispose();
         }
     }//GEN-LAST:event_btnCrearContratoActionPerformed
 
+    private void btnAgregarServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarServicioActionPerformed
+        String codigo= txtCodigoServicio.getText().trim();
+
+    int cantidad =(int)spnCantidad.getValue();
+
+    if(txtNumeroContrato.getText().isEmpty()){
+        JOptionPane.showMessageDialog(this, "Primero debe crear el contrato.");
+        return;
+    }
+
+    if(codigo.isEmpty()){JOptionPane.showMessageDialog(this, "Ingrese el código del servicio.");
+        return;
+    }
+
+    int numeroContrato =Integer.parseInt(txtNumeroContrato.getText());
+
+    try{
+        controladorContrato.agregarServicioContrato(numeroContrato,codigo, cantidad
+        );
+
+        Contrato contrato= controladorContrato.buscarContrato(numeroContrato);
+        cargarServicios(contrato);
+        txtSubtotal.setText(String.valueOf(contrato.calcularSubtotal()));
+        txtImpuesto.setText(String.valueOf(contrato.calcularImpuesto()));
+        txtTotal.setText(String.valueOf(contrato.calcularTotal()));
+        txtCodigoServicio.setText("");
+        spnCantidad.setValue(1);
+
+        JOptionPane.showMessageDialog(this, "Servicio agregado correctamente.");
+    }catch(NegocioException ex){
+        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnAgregarServicioActionPerformed
+
+    private void btnBuscarContratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarContratoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBuscarContratoActionPerformed
+
+    private void btnActivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActivarActionPerformed
+         if(txtNumeroContrato.getText().isEmpty()){
+        JOptionPane.showMessageDialog(this,"Primero debe cargar o crear un contrato.");
+        return;
+    }
+
+    int numeroContrato=Integer.parseInt(txtNumeroContrato.getText());
+
+    try{
+        boolean activado=controladorContrato.activarContrato(numeroContrato);
+        if(activado){
+            txtEstado.setText("Activo");
+
+            JOptionPane.showMessageDialog(this,"Contrato activado correctamente.");
+        }else{
+            JOptionPane.showMessageDialog(this,"No se encontró el contrato.");
+        }
+    }catch(CambioEstadoNoPermitidoException ex){ 
+        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnActivarActionPerformed
+
+    private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
+        if (txtNumeroContrato.getText().isEmpty()){
+        JOptionPane.showMessageDialog(this, "Primero debe cargar o crear un contrato.");
+        return;
+    }
+
+    int numeroContrato= Integer.parseInt(txtNumeroContrato.getText());
+
+    try{
+        boolean finalizado= controladorContrato.finalizarContrato(numeroContrato);
+
+        if(finalizado){
+            txtEstado.setText("Finalizado");
+
+            JOptionPane.showMessageDialog(this,"Contrato finalizado correctamente.");
+        }else{
+            JOptionPane.showMessageDialog(this,"No se encontró el contrato.");
+        }
+
+    }catch(CambioEstadoNoPermitidoException ex){
+
+        JOptionPane.showMessageDialog(this, ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnFinalizarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        if (txtNumeroContrato.getText().isEmpty()){
+        JOptionPane.showMessageDialog(this, "Primero debe cargar o crear un contrato.");
+        return;
+    }
+
+    int numeroContrato= Integer.parseInt(txtNumeroContrato.getText());
+
+    try{
+
+        boolean cancelado= controladorContrato.cancelarContrato(numeroContrato);
+
+        if(cancelado){
+            txtEstado.setText("Cancelado");
+
+            JOptionPane.showMessageDialog(this, "Contrato cancelado correctamente.");
+        }else{
+            JOptionPane.showMessageDialog(this, "No se encontró el contrato.");
+        }
+
+    }catch(CambioEstadoNoPermitidoException ex){
+
+        JOptionPane.showMessageDialog(this,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        limpiarFormulario();
+    }//GEN-LAST:event_btnNuevoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -588,8 +754,7 @@ dispose();
         }
         //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new VentanaContrato().setVisible(true));
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
