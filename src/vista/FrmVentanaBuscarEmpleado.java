@@ -49,7 +49,7 @@ public class FrmVentanaBuscarEmpleado extends javax.swing.JFrame {
         btnEliminar = new javax.swing.JButton();
         btnCerrar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -119,15 +119,23 @@ public class FrmVentanaBuscarEmpleado extends javax.swing.JFrame {
         tblEmpleados.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         tblEmpleados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Cedula", "Nombre", "Telefono", "Puesto", "Salario"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(tblEmpleados);
 
         jPanel8.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -192,7 +200,11 @@ public class FrmVentanaBuscarEmpleado extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        String id = txtId.getText();
+        String id = txtId.getText().trim();
+        if(id.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Ingrese una cédula.", "Dato requerido", JOptionPane.WARNING_MESSAGE);
+        return;
+        }
         Empleado empleado = controladorEmpleado.buscarEmpleado(id);
 
         if (empleado == null) {
@@ -214,10 +226,14 @@ public class FrmVentanaBuscarEmpleado extends javax.swing.JFrame {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         String id = JOptionPane.showInputDialog(this, "Ingrese la cédula del empleado a eliminar:");
-
-    if (id == null || id.isEmpty()) {
-        return;
+        
+        if (id== null){
+            return;
     }
+        id= id.trim();
+        if(id.isEmpty()){
+            return; 
+        }
 
     boolean eliminado = controladorEmpleado.eliminarEmpleado(id);
     if (eliminado) {
@@ -237,24 +253,14 @@ public class FrmVentanaBuscarEmpleado extends javax.swing.JFrame {
      */
     
     private void cargarTabla(ArrayList<Empleado> empleados) {
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("Cédula");
-        modelo.addColumn("Nombre");
-        modelo.addColumn("Teléfono");
-        modelo.addColumn("Puesto");
-        modelo.addColumn("Salario");
-
-        for (Empleado empleado : empleados) {
-            Object[] fila = {
-                empleado.getId(),
-                empleado.getNombreCompleto(),
-                empleado.getTelefono(),
-                empleado.getPuesto(),
-                empleado.getSalario()
-            };
-            modelo.addRow(fila);
+        DefaultTableModel modelo= (DefaultTableModel)tblEmpleados.getModel();
+        modelo.setRowCount(0);
+        
+        for(Empleado empleado: empleados){
+            Object[] fila={
+                empleado.getId(),empleado.getNombreCompleto(),empleado.getTelefono(),empleado.getPuesto(),empleado.getSalario()};
+        modelo.addRow(fila);
         }
-        tblEmpleados.setModel(modelo);
     }
     
     
@@ -269,11 +275,6 @@ public class FrmVentanaBuscarEmpleado extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tblEmpleados;
