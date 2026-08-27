@@ -10,6 +10,7 @@ import Modelo.EstadoEspacio;
 import Modelo.excepciones.EspacioOcupadoException;
 import Modelo.TipoEspacio;
 
+
 /**
  *
  * @author isaac
@@ -44,8 +45,8 @@ public class GestorEspacios {
         if(espacio==null){
             return false;
         }
-        if(espacio.getEstado()==EstadoEspacio.Ocupado){
-            throw new EspacioOcupadoException(numeroEspacio);
+        if (espacio.getEstado() != EstadoEspacio.Disponible){
+            throw new EspacioOcupadoException("No se puede eliminar el espacio " + numeroEspacio + " porque no está Disponible");
         }
         espacios.remove(numeroEspacio);
         return true;

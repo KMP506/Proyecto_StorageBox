@@ -83,6 +83,9 @@ public class GestorContratos {
         for(Contrato contrato: contratos){
             
             boolean cumple= true;
+            if (numeroContrato!= 0&& contrato.getNumeroContrato()!= numeroContrato){
+                cumple = false;
+            }
             
             if(!cliente.isEmpty() && !contrato.getCliente().getId().contains(cliente) && !contrato.getCliente().getNombreCompleto().toLowerCase().contains(cliente.toLowerCase())){
                 cumple= false;
@@ -101,5 +104,18 @@ public class GestorContratos {
             }
         }
         return resultado;
+    }
+    public boolean tieneContratosActivosOPendientes(String idCliente){
+        if(contratos== null){
+            return false;
+        }
+        for(Contrato contrato: contratos){
+            if(contrato.getCliente()!= null && contrato.getCliente().getId().equalsIgnoreCase(idCliente)){
+                if(contrato.getEstado()== EstadoContrato.Activo || contrato.getEstado()== EstadoContrato.Pendiente){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

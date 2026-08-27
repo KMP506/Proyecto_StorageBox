@@ -15,6 +15,7 @@ import Modelo.ServicioContratado;
 import javax.swing.table.DefaultTableModel;
 import Modelo.excepciones.CambioEstadoNoPermitidoException;
 import com.toedter.calendar.JDateChooser;
+import controlador.ControladorCliente;
 /**
  *
  * @author efrai
@@ -22,15 +23,17 @@ import com.toedter.calendar.JDateChooser;
 public class VentanaContrato extends javax.swing.JFrame {
     
     private ControladorContrato controladorContrato;
+    private ControladorCliente controladorCliente;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VentanaContrato.class.getName());
 
     /**
      * Creates new form VentanaContrato
      */
-    public VentanaContrato(ControladorContrato controladorContrato) {
+    public VentanaContrato(ControladorContrato controladorContrato, ControladorCliente controladorCliente) {
         initComponents();
-        controladorContrato= controladorContrato;
+        this.controladorContrato= controladorContrato;
+        this.controladorCliente= controladorCliente;
     }
 
     
@@ -283,6 +286,7 @@ public class VentanaContrato extends javax.swing.JFrame {
         btnConsultarDisponibilidad.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnConsultarDisponibilidad.setText("Consultar");
         btnConsultarDisponibilidad.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnConsultarDisponibilidad.addActionListener(this::btnConsultarDisponibilidadActionPerformed);
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel6.setText("Disponibles:");
@@ -601,7 +605,21 @@ public class VentanaContrato extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCerrarActionPerformed
 
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
-        // TODO add your handling code here:
+
+        String id= txtIdCliente.getText().trim();
+        if(id.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Ingrese una cédula.");
+            return;
+        }
+
+    Cliente cliente= controladorCliente.buscarCliente(id);
+
+    if(cliente== null){
+        JOptionPane.showMessageDialog(this, "No se encontró el cliente.");
+        return;
+    }
+
+    txtNombreCliente.setText(cliente.getNombreCompleto());
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
 
     private void btnCrearContratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearContratoActionPerformed
@@ -749,6 +767,28 @@ public class VentanaContrato extends javax.swing.JFrame {
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         limpiarFormulario();
     }//GEN-LAST:event_btnNuevoActionPerformed
+
+    private void btnConsultarDisponibilidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarDisponibilidadActionPerformed
+        if (dcFechaInicio.getDate()== null|| dcFechaFin.getDate()== null) {
+            JOptionPane.showMessageDialog(this, "Seleccione las fechas.");
+            return;
+        }
+
+        LocalDate fechaInicio = convertirFecha(dcFechaInicio);
+        LocalDate fechaFin = convertirFecha(dcFechaFin);
+
+        if(fechaFin.isBefore(fechaInicio)){
+            JOptionPane.showMessageDialog(this, "La fecha final debe ser posterior a la fecha inicial.");
+            return;
+        }
+
+        String tipoTexto = cboTipoEspacio.getSelectedItem().toString();
+        TipoEspacio tipo = TipoEspacio.valueOf(tipoTexto);
+
+    int cantidad= controladorContrato.cantidadEspaciosDisponibles( tipo, fechaInicio, fechaFin);
+
+    txtCantidadDisponible.setText(String.valueOf(cantidad));
+    }//GEN-LAST:event_btnConsultarDisponibilidadActionPerformed
 
     /**
      * @param args the command line arguments
