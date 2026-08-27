@@ -12,6 +12,7 @@ import Modelo.excepciones.CambioEstadoNoPermitidoException;
 import Modelo.excepciones.NegocioException;
 import java.time.LocalDate;
 import java.util.LinkedList;
+import Modelo.EstadoContrato;
 /**
  *
  * @author monto
@@ -63,6 +64,10 @@ public class ControladorContrato {
     public LinkedList<Contrato> listarContratos() {
         return sistema.getGestorContratos().getContratos();
     }
+    public LinkedList<Contrato> filtrarContratos(int numeroContrato, String cliente, String espacio, LocalDate fecha, EstadoContrato estado) {
+
+    return sistema.filtrarContratos(numeroContrato, cliente, espacio, fecha,estado);
+}
  
 }
  

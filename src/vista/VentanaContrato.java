@@ -14,6 +14,7 @@ import java.time.ZoneId;
 import Modelo.ServicioContratado;
 import javax.swing.table.DefaultTableModel;
 import Modelo.excepciones.CambioEstadoNoPermitidoException;
+import com.toedter.calendar.JDateChooser;
 /**
  *
  * @author efrai
@@ -33,8 +34,8 @@ public class VentanaContrato extends javax.swing.JFrame {
     }
 
     
-    private LocalDate convertirFecha(java.util.Date fecha){
-        return fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    private LocalDate convertirFecha(JDateChooser calendario){
+        return calendario.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
     private void cargarServicios(Contrato contrato){
     DefaultTableModel modelo= (DefaultTableModel) tblServicios.getModel();
@@ -69,6 +70,21 @@ public class VentanaContrato extends javax.swing.JFrame {
     txtSubtotal.setText("");
     txtImpuesto.setText("");
     txtTotal.setText("");
+    }
+    
+    public void cargarContrato(Contrato contrato){
+        txtNumeroContrato.setText(String.valueOf(contrato.getNumeroContrato()));
+        txtIdCliente.setText(contrato.getCliente().getId());
+        txtNombreCliente.setText(contrato.getCliente().getNombreCompleto());
+        txtEstado.setText(contrato.getEstado().toString());
+        txtEspacioAsignado.setText(contrato.getEspacio().getNumeroEspacio());
+        cboTipoEspacio.setSelectedItem(contrato.getEspacio().getTipo().toString());
+        txtSubtotal.setText(String.valueOf(contrato.calcularSubtotal()));
+        txtImpuesto.setText(String.valueOf(contrato.calcularImpuesto()));
+        
+        txtTotal.setText(String.valueOf(contrato.calcularTotal()));
+
+        cargarServicios(contrato);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -581,7 +597,7 @@ public class VentanaContrato extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
-dispose();       
+    dispose();       
     }//GEN-LAST:event_btnCerrarActionPerformed
 
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
@@ -597,8 +613,8 @@ dispose();
             return;
         }
         
-        LocalDate fechaInicio= convertirFecha(dcFechaInicio.getDate());
-        LocalDate fechaFin= convertirFecha(dcFechaFin.getDate());
+        LocalDate fechaInicio= convertirFecha(dcFechaInicio);
+        LocalDate fechaFin= convertirFecha(dcFechaFin);
         
         TipoEspacio tipo= TipoEspacio.valueOf(tipoTexto);
         
@@ -653,7 +669,8 @@ dispose();
     }//GEN-LAST:event_btnAgregarServicioActionPerformed
 
     private void btnBuscarContratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarContratoActionPerformed
-        // TODO add your handling code here:
+        FrmVentanaBuscarContrato ventana= new FrmVentanaBuscarContrato(controladorContrato, this);
+        ventana.setVisible(true);
     }//GEN-LAST:event_btnBuscarContratoActionPerformed
 
     private void btnActivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActivarActionPerformed
@@ -736,26 +753,6 @@ dispose();
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActivar;
