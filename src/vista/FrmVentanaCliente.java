@@ -4,6 +4,8 @@
  */
 package vista;
 
+import controlador.ControladorCliente;
+
 /**
  *
  * @author monto
@@ -15,7 +17,7 @@ public class FrmVentanaCliente extends javax.swing.JFrame {
     /**
      * Creates new form FrmVentanaCliente
      */
-    public FrmVentanaCliente() {
+    public FrmVentanaCliente(ControladorCliente controladorCliente) {
         initComponents();
     }
 
@@ -170,7 +172,7 @@ public class FrmVentanaCliente extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FrmVentanaCliente().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new FrmVentanaCliente(ControladorPrincipal.getControladorCliente()).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -4,10 +4,15 @@
  */
 package vista;
 
+
 /**
  *
  * @author monto
  */
+
+
+
+
 public class FrmVentanaPrincipal extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmVentanaPrincipal.class.getName());
@@ -16,7 +21,7 @@ public class FrmVentanaPrincipal extends javax.swing.JFrame {
      * Creates new form FrmVentanaPrincipal
      */
     public FrmVentanaPrincipal() {
-        initComponents();
+     
     }
 
     /**
@@ -125,7 +130,7 @@ public class FrmVentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditarClienteActionPerformed
 
     private void btnNuevoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoClienteActionPerformed
-        // TODO add your handling code here:
+     
     }//GEN-LAST:event_btnNuevoClienteActionPerformed
 
     /**

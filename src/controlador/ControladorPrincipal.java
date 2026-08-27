@@ -3,15 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package controlador;
-
 import Modelo.SistemaStorageBox;
+
+
 /**
  *
  * @author monto
  */
 public class ControladorPrincipal {
- 
-    private SistemaStorageBox sistema;
+   private SistemaStorageBox sistema;
     private ControladorCliente controladorCliente;
     private ControladorEspacio controladorEspacio;
     private ControladorServicio controladorServicio;
@@ -50,5 +50,4 @@ public class ControladorPrincipal {
     public ControladorContrato getControladorContrato() {
         return controladorContrato;
     }
- 
 }

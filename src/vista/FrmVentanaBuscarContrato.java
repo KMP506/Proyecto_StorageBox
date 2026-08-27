@@ -76,7 +76,7 @@ public class FrmVentanaBuscarContrato extends javax.swing.JFrame {
         txtFiltroNumero = new javax.swing.JTextField();
         txtFiltroCliente = new javax.swing.JTextField();
         txtFiltroEspacio = new javax.swing.JTextField();
-        dcFiltroFecha = new com.toedter.calendar.JDateChooser();
+        dcFiltroFecha = new org.netbeans.modules.form.InvalidComponent();
         cboFiltroEstado = new javax.swing.JComboBox<>();
         btnBuscar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
@@ -132,9 +132,8 @@ public class FrmVentanaBuscarContrato extends javax.swing.JFrame {
 
         txtFiltroEspacio.setToolTipText("Ingrese el número del espacio");
 
-        dcFiltroFecha.setDateFormatString("yyyy-MM-dd");
-
         cboFiltroEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Pendiente", "Activo", "Finalizado", "Cancelado" }));
+        cboFiltroEstado.addActionListener(this::cboFiltroEstadoActionPerformed);
 
         btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnBuscar.setText("Buscar");
@@ -365,6 +364,10 @@ public class FrmVentanaBuscarContrato extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
+    private void cboFiltroEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboFiltroEstadoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboFiltroEstadoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -375,7 +378,7 @@ public class FrmVentanaBuscarContrato extends javax.swing.JFrame {
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JComboBox<String> cboFiltroEstado;
-    private com.toedter.calendar.JDateChooser dcFiltroFecha;
+    private org.netbeans.modules.form.InvalidComponent dcFiltroFecha;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
