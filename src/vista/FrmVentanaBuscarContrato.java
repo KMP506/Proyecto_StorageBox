@@ -3,21 +3,58 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package vista;
-
+import Modelo.Contrato;
+import java.util.LinkedList;
+import javax.swing.table.DefaultTableModel;
+import controlador.ControladorContrato;
+import Modelo.EstadoContrato;
+import com.toedter.calendar.JDateChooser;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import javax.swing.JOptionPane;
 /**
  *
  * @author efrai
  */
 public class FrmVentanaBuscarContrato extends javax.swing.JFrame {
     
+    private ControladorContrato controladorContrato;
+    private VentanaContrato ventanaContrato;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmVentanaBuscarContrato.class.getName());
 
     /**
      * Creates new form FrmVentanaBuscarContrato
      */
-    public FrmVentanaBuscarContrato() {
+    public FrmVentanaBuscarContrato(ControladorContrato controladorContrato, VentanaContrato ventanaContrato) {
         initComponents();
+        this.controladorContrato= controladorContrato;
+        this.ventanaContrato= ventanaContrato;
+        cargarTabla(controladorContrato.listarContratos());
     }
+    
+    private LocalDate convertirFecha(JDateChooser calendario){
+        return calendario.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+    
+    private void cargarTabla(LinkedList<Contrato> contratos){
+        DefaultTableModel modelo= (DefaultTableModel)tblContratos.getModel();
+        
+        modelo.setRowCount(0);
+        for(Contrato contrato: contratos){
+            Object[] fila= {
+                contrato.getNumeroContrato(),
+                contrato.getCliente().getNombreCompleto(),
+                contrato.getEspacio().getNumeroEspacio(),
+                contrato.getFechaInicio(),
+                contrato.getFechaFin(),
+                contrato.getEstado(),
+                contrato.calcularTotal()
+            };
+            modelo.addRow(fila);
+        }
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -101,9 +138,11 @@ public class FrmVentanaBuscarContrato extends javax.swing.JFrame {
 
         btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(this::btnBuscarActionPerformed);
 
         btnLimpiar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(this::btnLimpiarActionPerformed);
 
         javax.swing.GroupLayout pnlFiltrosLayout = new javax.swing.GroupLayout(pnlFiltros);
         pnlFiltros.setLayout(pnlFiltrosLayout);
@@ -207,6 +246,7 @@ public class FrmVentanaBuscarContrato extends javax.swing.JFrame {
 
         btnAceptar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnAceptar.setText("Aceptar");
+        btnAceptar.addActionListener(this::btnAceptarActionPerformed);
 
         btnCancelar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnCancelar.setText("Cancelar");
@@ -265,30 +305,69 @@ public class FrmVentanaBuscarContrato extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        int numeroContrato= 0;
+        
+        String numeroTexto= txtFiltroNumero.getText().trim();
+        String cliente= txtFiltroCliente.getText().trim();
+        String espacio= txtFiltroEspacio.getText().trim();
+        
+        LocalDate fecha= null; 
+        EstadoContrato estado= null;
+        
+        try{
+            if(!numeroTexto.isEmpty()){
+                numeroContrato= Integer.parseInt(numeroTexto);
+            }
+            if (dcFiltroFecha.getDate()!= null) {
+                fecha= convertirFecha(dcFiltroFecha);
+            }
+
+        String estadoTexto= (String) cboFiltroEstado.getSelectedItem();
+
+            if (!estadoTexto.equals("Todos")){
+                estado= EstadoContrato.valueOf(estadoTexto);
+        }
+
+        cargarTabla(controladorContrato.filtrarContratos(numeroContrato, cliente, espacio, fecha,estado)
+        );
+
+    }catch(NumberFormatException ex){
+        JOptionPane.showMessageDialog(this, "El número de contrato debe ser un número.", "Dato inválido", JOptionPane.ERROR_MESSAGE);
+    
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+    
+        txtFiltroNumero.setText("");
+        txtFiltroCliente.setText("");
+        txtFiltroEspacio.setText("");
+
+        dcFiltroFecha.setDate(null);
+        cboFiltroEstado.setSelectedIndex(0);
+        cargarTabla(controladorContrato.listarContratos());
+    }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        int fila= tblContratos.getSelectedRow();
+
+        if(fila== -1){
+        JOptionPane.showMessageDialog(this, "Seleccione un contrato.");
+        return;
+        }
+        int numeroContrato= Integer.parseInt(tblContratos.getValueAt(fila, 0).toString()
+        );
+        Contrato contrato=controladorContrato.buscarContrato(numeroContrato);
+        if(contrato!= null){
+        ventanaContrato.cargarContrato(contrato);
+        this.dispose();
+        }
+    }//GEN-LAST:event_btnAceptarActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FrmVentanaBuscarContrato().setVisible(true));
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;

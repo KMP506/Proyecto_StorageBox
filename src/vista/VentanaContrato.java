@@ -4,23 +4,88 @@
  */
 package vista;
 import Modelo.Cliente;
-import controlador.ControladorPrincipal;
+import controlador.ControladorContrato;
 import javax.swing.JOptionPane;
+import Modelo.Contrato;
+import Modelo.TipoEspacio;
+import Modelo.excepciones.NegocioException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import Modelo.ServicioContratado;
+import javax.swing.table.DefaultTableModel;
+import Modelo.excepciones.CambioEstadoNoPermitidoException;
+import com.toedter.calendar.JDateChooser;
 /**
  *
  * @author efrai
  */
 public class VentanaContrato extends javax.swing.JFrame {
     
+    private ControladorContrato controladorContrato;
+    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VentanaContrato.class.getName());
 
     /**
      * Creates new form VentanaContrato
      */
-    public VentanaContrato() {
+    public VentanaContrato(ControladorContrato controladorContrato) {
         initComponents();
+        controladorContrato= controladorContrato;
     }
 
+    
+    private LocalDate convertirFecha(JDateChooser calendario){
+        return calendario.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+    private void cargarServicios(Contrato contrato){
+    DefaultTableModel modelo= (DefaultTableModel) tblServicios.getModel();
+
+    modelo.setRowCount(0);
+    for(ServicioContratado sc: contrato.getServicios()) {
+
+        Object[] fila={
+            sc.getServicio().getCodigo(), sc.getServicio().getDescripcion(),
+            sc.getCantidad(), sc.getServicio().getPrecio(), sc.calcularMonto()
+        };
+        modelo.addRow(fila);
+        }
+    }
+    
+    private void limpiarFormulario(){
+
+    txtNumeroContrato.setText("");
+    txtEstado.setText("");
+    txtIdCliente.setText("");
+    txtNombreCliente.setText("");
+    dcFechaInicio.setDate(null);
+    dcFechaFin.setDate(null);
+    cboTipoEspacio.setSelectedIndex(0);
+    txtCantidadDisponible.setText("");
+    txtEspacioAsignado.setText("");
+    txtCodigoServicio.setText("");
+    spnCantidad.setValue(1);
+
+    DefaultTableModel modelo= (DefaultTableModel) tblServicios.getModel();
+    modelo.setRowCount(0);
+    txtSubtotal.setText("");
+    txtImpuesto.setText("");
+    txtTotal.setText("");
+    }
+    
+    public void cargarContrato(Contrato contrato){
+        txtNumeroContrato.setText(String.valueOf(contrato.getNumeroContrato()));
+        txtIdCliente.setText(contrato.getCliente().getId());
+        txtNombreCliente.setText(contrato.getCliente().getNombreCompleto());
+        txtEstado.setText(contrato.getEstado().toString());
+        txtEspacioAsignado.setText(contrato.getEspacio().getNumeroEspacio());
+        cboTipoEspacio.setSelectedItem(contrato.getEspacio().getTipo().toString());
+        txtSubtotal.setText(String.valueOf(contrato.calcularSubtotal()));
+        txtImpuesto.setText(String.valueOf(contrato.calcularImpuesto()));
+        
+        txtTotal.setText(String.valueOf(contrato.calcularTotal()));
+
+        cargarServicios(contrato);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -145,6 +210,7 @@ public class VentanaContrato extends javax.swing.JFrame {
         btnBuscarCliente.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnBuscarCliente.setText("Buscar");
         btnBuscarCliente.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnBuscarCliente.addActionListener(this::btnBuscarClienteActionPerformed);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Nombre:");
@@ -152,6 +218,7 @@ public class VentanaContrato extends javax.swing.JFrame {
 
         txtIdCliente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        txtNombreCliente.setEditable(false);
         txtNombreCliente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -264,7 +331,7 @@ public class VentanaContrato extends javax.swing.JFrame {
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtEspacioAsignado, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(100, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -299,6 +366,7 @@ public class VentanaContrato extends javax.swing.JFrame {
         btnAgregarServicio.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnAgregarServicio.setText("Agregar");
         btnAgregarServicio.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnAgregarServicio.addActionListener(this::btnAgregarServicioActionPerformed);
 
         tblServicios.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         tblServicios.setModel(new javax.swing.table.DefaultTableModel(
@@ -311,7 +379,15 @@ public class VentanaContrato extends javax.swing.JFrame {
             new String [] {
                 "Codigo", "Descripción", "Cantidad", "Precio Unitario", "Subtotal"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblServicios);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -419,21 +495,27 @@ public class VentanaContrato extends javax.swing.JFrame {
 
         btnBuscarContrato.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnBuscarContrato.setText("Buscar");
+        btnBuscarContrato.addActionListener(this::btnBuscarContratoActionPerformed);
 
         btnNuevo.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnNuevo.setText("Nuevo");
+        btnNuevo.addActionListener(this::btnNuevoActionPerformed);
 
         btnActivar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnActivar.setText("Activar");
+        btnActivar.addActionListener(this::btnActivarActionPerformed);
 
         btnFinalizar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnFinalizar.setText("Finalizar");
+        btnFinalizar.addActionListener(this::btnFinalizarActionPerformed);
 
         btnCancelar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(this::btnCancelarActionPerformed);
 
         btnCrearContrato.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnCrearContrato.setText("Crear");
+        btnCrearContrato.addActionListener(this::btnCrearContratoActionPerformed);
 
         btnCerrar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnCerrar.setText("Cerrar");
@@ -483,12 +565,11 @@ public class VentanaContrato extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -516,33 +597,162 @@ public class VentanaContrato extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
-dispose();       
+    dispose();       
     }//GEN-LAST:event_btnCerrarActionPerformed
+
+    private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBuscarClienteActionPerformed
+
+    private void btnCrearContratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearContratoActionPerformed
+        String idCliente= txtIdCliente.getText().trim();
+        String tipoTexto=(String) cboTipoEspacio.getSelectedItem();
+        
+        if(idCliente.isEmpty() || dcFechaInicio.getDate()== null || dcFechaFin.getDate()== null){
+            JOptionPane.showMessageDialog(this, "Debe completar todos los datos del contrato");
+            return;
+        }
+        
+        LocalDate fechaInicio= convertirFecha(dcFechaInicio);
+        LocalDate fechaFin= convertirFecha(dcFechaFin);
+        
+        TipoEspacio tipo= TipoEspacio.valueOf(tipoTexto);
+        
+        try{
+            Contrato contrato= controladorContrato.crearContrato(idCliente, tipo, fechaInicio, fechaFin);
+            txtNumeroContrato.setText(String.valueOf(contrato.getNumeroContrato()));
+            txtEstado.setText(contrato.getEstado().toString());
+            txtEspacioAsignado.setText(contrato.getEspacio().getNumeroEspacio());
+            txtSubtotal.setText(String.valueOf(contrato.calcularSubtotal()));
+            txtImpuesto.setText(String.valueOf(contrato.calcularImpuesto()));
+            txtTotal.setText(String.valueOf(contrato.calcularTotal()));
+            
+            JOptionPane.showMessageDialog(this, "Contrato creado correctamente");
+        }catch(NegocioException ex){
+         
+            JOptionPane.showMessageDialog(this, ex.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnCrearContratoActionPerformed
+
+    private void btnAgregarServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarServicioActionPerformed
+        String codigo= txtCodigoServicio.getText().trim();
+
+    int cantidad =(int)spnCantidad.getValue();
+
+    if(txtNumeroContrato.getText().isEmpty()){
+        JOptionPane.showMessageDialog(this, "Primero debe crear el contrato.");
+        return;
+    }
+
+    if(codigo.isEmpty()){JOptionPane.showMessageDialog(this, "Ingrese el código del servicio.");
+        return;
+    }
+
+    int numeroContrato =Integer.parseInt(txtNumeroContrato.getText());
+
+    try{
+        controladorContrato.agregarServicioContrato(numeroContrato,codigo, cantidad
+        );
+
+        Contrato contrato= controladorContrato.buscarContrato(numeroContrato);
+        cargarServicios(contrato);
+        txtSubtotal.setText(String.valueOf(contrato.calcularSubtotal()));
+        txtImpuesto.setText(String.valueOf(contrato.calcularImpuesto()));
+        txtTotal.setText(String.valueOf(contrato.calcularTotal()));
+        txtCodigoServicio.setText("");
+        spnCantidad.setValue(1);
+
+        JOptionPane.showMessageDialog(this, "Servicio agregado correctamente.");
+    }catch(NegocioException ex){
+        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnAgregarServicioActionPerformed
+
+    private void btnBuscarContratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarContratoActionPerformed
+        FrmVentanaBuscarContrato ventana= new FrmVentanaBuscarContrato(controladorContrato, this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_btnBuscarContratoActionPerformed
+
+    private void btnActivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActivarActionPerformed
+         if(txtNumeroContrato.getText().isEmpty()){
+        JOptionPane.showMessageDialog(this,"Primero debe cargar o crear un contrato.");
+        return;
+    }
+
+    int numeroContrato=Integer.parseInt(txtNumeroContrato.getText());
+
+    try{
+        boolean activado=controladorContrato.activarContrato(numeroContrato);
+        if(activado){
+            txtEstado.setText("Activo");
+
+            JOptionPane.showMessageDialog(this,"Contrato activado correctamente.");
+        }else{
+            JOptionPane.showMessageDialog(this,"No se encontró el contrato.");
+        }
+    }catch(CambioEstadoNoPermitidoException ex){ 
+        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnActivarActionPerformed
+
+    private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
+        if (txtNumeroContrato.getText().isEmpty()){
+        JOptionPane.showMessageDialog(this, "Primero debe cargar o crear un contrato.");
+        return;
+    }
+
+    int numeroContrato= Integer.parseInt(txtNumeroContrato.getText());
+
+    try{
+        boolean finalizado= controladorContrato.finalizarContrato(numeroContrato);
+
+        if(finalizado){
+            txtEstado.setText("Finalizado");
+
+            JOptionPane.showMessageDialog(this,"Contrato finalizado correctamente.");
+        }else{
+            JOptionPane.showMessageDialog(this,"No se encontró el contrato.");
+        }
+
+    }catch(CambioEstadoNoPermitidoException ex){
+
+        JOptionPane.showMessageDialog(this, ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnFinalizarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        if (txtNumeroContrato.getText().isEmpty()){
+        JOptionPane.showMessageDialog(this, "Primero debe cargar o crear un contrato.");
+        return;
+    }
+
+    int numeroContrato= Integer.parseInt(txtNumeroContrato.getText());
+
+    try{
+
+        boolean cancelado= controladorContrato.cancelarContrato(numeroContrato);
+
+        if(cancelado){
+            txtEstado.setText("Cancelado");
+
+            JOptionPane.showMessageDialog(this, "Contrato cancelado correctamente.");
+        }else{
+            JOptionPane.showMessageDialog(this, "No se encontró el contrato.");
+        }
+
+    }catch(CambioEstadoNoPermitidoException ex){
+
+        JOptionPane.showMessageDialog(this,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        limpiarFormulario();
+    }//GEN-LAST:event_btnNuevoActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new VentanaContrato().setVisible(true));
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActivar;

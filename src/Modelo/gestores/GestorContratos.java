@@ -76,4 +76,30 @@ public class GestorContratos {
         }
         return true;
     }
+    
+    public LinkedList<Contrato> filtrar(int numeroContrato, String cliente, String espacio, LocalDate fecha, EstadoContrato estado){
+        
+        LinkedList<Contrato> resultado= new LinkedList<>();
+        for(Contrato contrato: contratos){
+            
+            boolean cumple= true;
+            
+            if(!cliente.isEmpty() && !contrato.getCliente().getId().contains(cliente) && !contrato.getCliente().getNombreCompleto().toLowerCase().contains(cliente.toLowerCase())){
+                cumple= false;
+            }
+            if(!espacio.isEmpty() &&  !contrato.getEspacio().getNumeroEspacio().equalsIgnoreCase(espacio)){
+                cumple=false;
+            }
+            if(fecha!= null && (fecha.isBefore(contrato.getFechaInicio()) || fecha.isAfter(contrato.getFechaFin()))){
+                cumple= false;
+            }
+            if(estado!= null && contrato.getEstado()!= estado){
+                cumple = false;
+            }
+            if(cumple){
+                resultado.add(contrato);
+            }
+        }
+        return resultado;
+    }
 }

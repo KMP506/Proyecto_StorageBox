@@ -46,12 +46,14 @@ public class FrmVentanaEmpleado extends javax.swing.JFrame {
         txtTelefono = new javax.swing.JTextField();
         txtNombre = new javax.swing.JTextField();
         cbPuesto = new javax.swing.JComboBox<>();
+        lblSalario = new javax.swing.JLabel();
+        txtSalario = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
+        btnLimpiar = new javax.swing.JButton();
+        btnCerrar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -73,7 +75,7 @@ public class FrmVentanaEmpleado extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addComponent(jLabel5)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -104,6 +106,13 @@ public class FrmVentanaEmpleado extends javax.swing.JFrame {
         cbPuesto.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         cbPuesto.addActionListener(this::cbPuestoActionPerformed);
 
+        lblSalario.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblSalario.setText("Salario:");
+        lblSalario.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        txtSalario.setEditable(false);
+        txtSalario.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -114,13 +123,15 @@ public class FrmVentanaEmpleado extends javax.swing.JFrame {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblSalario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(40, 40, 40)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtId)
                     .addComponent(txtTelefono)
-                    .addComponent(cbPuesto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(cbPuesto, 0, 490, Short.MAX_VALUE)
+                    .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtSalario))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -142,22 +153,26 @@ public class FrmVentanaEmpleado extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(cbPuesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(134, 134, 134))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSalario)
+                    .addComponent(txtSalario))
+                .addGap(108, 108, 108))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jButton1.setText("Guardar");
-        jButton1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButton1.addActionListener(this::jButton1ActionPerformed);
+        btnGuardar.setText("Guardar");
+        btnGuardar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnGuardar.addActionListener(this::btnGuardarActionPerformed);
 
-        jButton2.setText("Limpiar");
-        jButton2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButton2.addActionListener(this::jButton2ActionPerformed);
+        btnLimpiar.setText("Limpiar");
+        btnLimpiar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnLimpiar.addActionListener(this::btnLimpiarActionPerformed);
 
-        jButton3.setText("Cerrar");
-        jButton3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButton3.addActionListener(this::jButton3ActionPerformed);
+        btnCerrar.setText("Cerrar");
+        btnCerrar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnCerrar.addActionListener(this::btnCerrarActionPerformed);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -165,11 +180,11 @@ public class FrmVentanaEmpleado extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(btnGuardar)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addComponent(btnLimpiar)
                 .addGap(18, 18, 18)
-                .addComponent(jButton3)
+                .addComponent(btnCerrar)
                 .addGap(95, 95, 95))
         );
         jPanel3Layout.setVerticalGroup(
@@ -177,9 +192,9 @@ public class FrmVentanaEmpleado extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton3)
-                    .addComponent(jButton2))
+                    .addComponent(btnGuardar)
+                    .addComponent(btnCerrar)
+                    .addComponent(btnLimpiar))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
@@ -201,7 +216,7 @@ public class FrmVentanaEmpleado extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -210,10 +225,10 @@ public class FrmVentanaEmpleado extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String id = txtId.getText();
-        String nombre = txtNombre.getText();
-        String telefono = txtTelefono.getText();
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        String id = txtId.getText().trim();
+        String nombre = txtNombre.getText().trim();
+        String telefono = txtTelefono.getText().trim();
         String puestoTexto = (String) cbPuesto.getSelectedItem();
         Puesto puesto = Puesto.valueOf(puestoTexto);
         
@@ -232,28 +247,33 @@ public class FrmVentanaEmpleado extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void cbPuestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPuestoActionPerformed
-        // TODO add your handling code here:
+        String puestoTexto= (String) cbPuesto.getSelectedItem();
+        if(puestoTexto!= null){
+            Puesto puesto= Puesto.valueOf(puestoTexto);
+            
+            txtSalario.setText(String.valueOf((int)puesto.getSalarioDefecto()));
+        }
     }//GEN-LAST:event_cbPuestoActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         limpiarCampos();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnLimpiarActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         this.dispose();
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_btnCerrarActionPerformed
 
     
-      private void cargarPuestos(){
+    private void cargarPuestos(){
         for (Puesto puesto : Puesto.values()) {
             cbPuesto.addItem(puesto.toString());
         }
     }
       
-         private void limpiarCampos() {
+    private void limpiarCampos() {
         txtId.setText("");
         txtNombre.setText("");
         txtTelefono.setText("");
@@ -267,10 +287,10 @@ public class FrmVentanaEmpleado extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCerrar;
+    private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnLimpiar;
     private javax.swing.JComboBox<String> cbPuesto;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -279,8 +299,10 @@ public class FrmVentanaEmpleado extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel lblSalario;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtSalario;
     private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 }

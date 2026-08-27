@@ -18,6 +18,7 @@ import Modelo.excepciones.EspacioNoDisponibleException;
 import Modelo.excepciones.FechaInvalidaException;
 import Modelo.excepciones.NegocioException;
 import java.time.LocalDate;
+import java.util.LinkedList;
 
 /**
  *
@@ -260,4 +261,9 @@ public boolean cancelarContrato(int numeroContrato)
     contrato.cancelar();
     return true;
 }
+
+    public LinkedList<Contrato> filtrarContratos(int numeroContrato, String cliente, String espacio, LocalDate fecha, EstadoContrato estado){
+         
+        return gestorContratos.filtrar(numeroContrato, cliente, espacio, fecha, estado);
+    }
 }
