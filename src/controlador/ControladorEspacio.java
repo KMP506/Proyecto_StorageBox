@@ -25,10 +25,11 @@ public class ControladorEspacio {
         this.sistema = sistema;
     }
  
-    public void agregarEspacio(String numeroEspacio, TipoEspacio tipo)
+    public void agregarEspacio(String numeroEspacio, TipoEspacio tipo, double precio)
             throws EspacioDuplicadoException {
  
         Espacio espacio = new Espacio(numeroEspacio, tipo);
+        espacio.setPrecioMensual(precio);
         sistema.agregarEspacio(espacio);
     }
  

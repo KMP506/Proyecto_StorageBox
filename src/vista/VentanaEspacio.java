@@ -65,7 +65,7 @@ public class VentanaEspacio extends javax.swing.JFrame {
         btnBuscar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Administrar Espacio");
         setResizable(false);
 
@@ -267,8 +267,12 @@ public class VentanaEspacio extends javax.swing.JFrame {
 
         try{
 
-        controlador.agregarEspacio(numero, tipo);
+        double precio= Double.parseDouble(txtPrecio.getText().trim());
+        controlador.agregarEspacio(numero, tipo, precio);
         JOptionPane.showMessageDialog(this, "Espacio agregado correctamente.");
+    }catch(NumberFormatException ex){
+        JOptionPane.showMessageDialog(this, "El precio debe ser un número válido.");
+
     }catch(EspacioDuplicadoException ex){
         JOptionPane.showMessageDialog(this, ex.getMessage());
         }
