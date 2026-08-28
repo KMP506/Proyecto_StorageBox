@@ -5,6 +5,10 @@
 package vista;
 import controlador.ControladorEspacio;
 import Modelo.TipoEspacio;
+import Modelo.excepciones.EspacioDuplicadoException;
+import controlador.ControladorPrincipal;
+import javax.swing.JOptionPane;
+import Modelo.excepciones.EspacioOcupadoException;
 /**
  *
  * @author isaac
@@ -128,6 +132,7 @@ public class VentanaEspacio extends javax.swing.JFrame {
         jPanel3.setLayout(new java.awt.GridLayout(1, 5, 10, 10));
 
         btnAgregar.setText("Agregar");
+        btnAgregar.addActionListener(this::btnAgregarActionPerformed);
         jPanel3.add(btnAgregar);
 
         btnActualizar.setText("Actualizar");
@@ -135,6 +140,7 @@ public class VentanaEspacio extends javax.swing.JFrame {
         jPanel3.add(btnActualizar);
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(this::btnEliminarActionPerformed);
         jPanel3.add(btnEliminar);
 
         btnBuscar.setText("Buscar");
@@ -166,7 +172,45 @@ public class VentanaEspacio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        // TODO add your handling code here:
+        String numero = txtNumero.getText().trim();
+        
+        if(numero.isEmpty()){
+        JOptionPane.showMessageDialog(this, "Debe ingresar el número del espacio.");
+        return;
+        }
+        
+        double precio;
+        try{
+        precio= Double.parseDouble(txtPrecio.getText());
+
+        if(precio<=0){
+            JOptionPane.showMessageDialog(this, "El precio debe ser mayor que cero.");
+            return;
+        }
+
+        }catch(NumberFormatException ex){
+            JOptionPane.showMessageDialog(this, "El precio debe ser un número válido.");
+            return;
+        }
+
+        String tipoSeleccionado= cbTipo.getSelectedItem().toString();
+
+        TipoEspacio tipo= TipoEspacio.Pequeño;
+
+        if(tipoSeleccionado.equals("Mediano")){
+            tipo= TipoEspacio.Mediano;
+        }else if(tipoSeleccionado.equals("Grande")) {
+            tipo= TipoEspacio.Grande;
+        }
+
+        double tamano= tipo.getTamanoM2();
+        boolean actualizado= controlador.actualizarEspacio(numero, tipo, tamano, precio);
+
+        if(actualizado){
+            JOptionPane.showMessageDialog(this, "Espacio actualizado correctamente.");
+        }else{
+            JOptionPane.showMessageDialog(this, "No se encontró el espacio.");
+            }
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
@@ -190,32 +234,62 @@ public class VentanaEspacio extends javax.swing.JFrame {
         }else if(tipo.equals("Grande")){
             txtTamano.setText(String.valueOf(TipoEspacio.Grande.getTamanoM2()));
             txtPrecio.setText(String.valueOf(TipoEspacio.Grande.getPrecioDefecto()));
+        }    
     }//GEN-LAST:event_cbTipoActionPerformed
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        String numero = txtNumero.getText().trim();
+        
+        if(numero.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Debe ingresar el número del espacio.");
+            return;
+        }
+
+        String tipoSeleccionado= cbTipo.getSelectedItem().toString();
+
+        TipoEspacio tipo= TipoEspacio.Pequeño;
+
+        if(tipoSeleccionado.equals("Mediano")){
+        tipo= TipoEspacio.Mediano;
+        }else if(tipoSeleccionado.equals("Grande")){
+        tipo= TipoEspacio.Grande;
+        }
+
+        try{
+
+        controlador.agregarEspacio(numero, tipo);
+        JOptionPane.showMessageDialog(this, "Espacio agregado correctamente.");
+    }catch(EspacioDuplicadoException ex){
+        JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        String numero = txtNumero.getText().trim();
+
+        if(numero.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Debe ingresar el número del espacio.");
+            return;
+        }
+
+        try{
+
+        boolean eliminado = controlador.eliminarEspacio(numero);
+
+        if(eliminado){
+            JOptionPane.showMessageDialog(this, "Espacio eliminado correctamente.");
+        }else{
+            JOptionPane.showMessageDialog(this, "No se encontró el espacio.");
+        }
+
+        }catch(EspacioOcupadoException ex) {
+            JOptionPane.showMessageDialog(this, "No se puede eliminar el espacio porque está ocupado.");
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new VentanaEspacio().setVisible(true));
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
