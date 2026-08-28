@@ -52,6 +52,7 @@ public class FrmVentanaEmpleado extends javax.swing.JFrame {
         btnGuardar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
         btnCerrar = new javax.swing.JButton();
+        btnActualizar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -174,12 +175,18 @@ public class FrmVentanaEmpleado extends javax.swing.JFrame {
         btnCerrar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnCerrar.addActionListener(this::btnCerrarActionPerformed);
 
+        btnActualizar.setText("Actualizar");
+        btnActualizar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnActualizar.addActionListener(this::btnActualizarActionPerformed);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnActualizar)
+                .addGap(18, 18, 18)
                 .addComponent(btnGuardar)
                 .addGap(18, 18, 18)
                 .addComponent(btnLimpiar)
@@ -194,8 +201,9 @@ public class FrmVentanaEmpleado extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar)
                     .addComponent(btnCerrar)
-                    .addComponent(btnLimpiar))
-                .addContainerGap(21, Short.MAX_VALUE))
+                    .addComponent(btnLimpiar)
+                    .addComponent(btnActualizar))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -213,13 +221,13 @@ public class FrmVentanaEmpleado extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -266,6 +274,31 @@ public class FrmVentanaEmpleado extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed
 
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+
+    String id = txtId.getText().trim();
+    String nombre = txtNombre.getText().trim();
+    String telefono = txtTelefono.getText().trim();
+
+    String puestoTexto =(String) cbPuesto.getSelectedItem();
+
+    if(id.isEmpty()|| nombre.isEmpty()|| telefono.isEmpty()|| puestoTexto == null){
+
+        JOptionPane.showMessageDialog(this,"Debe completar todos los datos.");
+        return;
+    }
+    
+    Puesto puesto = Puesto.valueOf(puestoTexto);
+    boolean actualizado =controladorEmpleado.actualizarEmpleado(id,nombre,telefono,puesto);
+
+    if(actualizado){JOptionPane.showMessageDialog(this,"Empleado actualizado correctamente.");
+        txtSalario.setText(String.valueOf((int) puesto.getSalarioDefecto()));
+    } else {
+        JOptionPane.showMessageDialog(this,"No se encontró el empleado.");
+    }
+    
+    }//GEN-LAST:event_btnActualizarActionPerformed
+
     
     private void cargarPuestos(){
         for (Puesto puesto : Puesto.values()) {
@@ -287,6 +320,7 @@ public class FrmVentanaEmpleado extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;

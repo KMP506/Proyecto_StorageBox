@@ -28,6 +28,7 @@ public class FrmVentanaPrincipal extends javax.swing.JFrame {
     public FrmVentanaPrincipal(ControladorPrincipal controladorPrincipal) {
       initComponents();
       this.controladorPrincipal = controladorPrincipal;
+      setLocationRelativeTo(null);
     }
 
     /**
@@ -206,55 +207,48 @@ public class FrmVentanaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        this.dispose();
+        dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
-        FrmVentanaCliente ventana = new FrmVentanaCliente();
-        ventana.setLocationRelativeTo(null);
+        FrmVentanaCliente ventana = new FrmVentanaCliente(controladorPrincipal.getControladorCliente());
+        ventana.setLocationRelativeTo(this);
         ventana.setVisible(true);
     }//GEN-LAST:event_btnClientesActionPerformed
 
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
-        FrmBuscarCliente ventana = new FrmBuscarCliente(
-                controladorPrincipal.getControladorCliente(), this);
-        ventana.setLocationRelativeTo(null);
+        FrmBuscarCliente ventana = new FrmBuscarCliente(controladorPrincipal.getControladorCliente());
+        ventana.setLocationRelativeTo(this);
         ventana.setVisible(true);
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
 
     private void btnNuevoEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoEmpleadoActionPerformed
-        FrmVentanaEmpleado ventana = new FrmVentanaEmpleado(
-                controladorPrincipal.getControladorEmpleado());
-        ventana.setLocationRelativeTo(null);
+        FrmVentanaEmpleado ventana = new FrmVentanaEmpleado(controladorPrincipal.getControladorEmpleado());
+        ventana.setLocationRelativeTo(this);
         ventana.setVisible(true);
     }//GEN-LAST:event_btnNuevoEmpleadoActionPerformed
 
     private void btnBuscarEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarEmpleadoActionPerformed
-        FrmVentanaBuscarEmpleado ventana = new FrmVentanaBuscarEmpleado(
-                controladorPrincipal.getControladorEmpleado());
-        ventana.setLocationRelativeTo(null);
+        FrmVentanaBuscarEmpleado ventana = new FrmVentanaBuscarEmpleado(controladorPrincipal.getControladorEmpleado());
+        ventana.setLocationRelativeTo(this);
         ventana.setVisible(true);
     }//GEN-LAST:event_btnBuscarEmpleadoActionPerformed
 
     private void btnEspaciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEspaciosActionPerformed
-        vista.VentanaEspacio ventana = new vista.VentanaEspacio(
-                controladorPrincipal.getControladorEspacio());
-        ventana.setLocationRelativeTo(null);
+        vista.VentanaEspacio ventana = new vista.VentanaEspacio(controladorPrincipal.getControladorEspacio());
+        ventana.setLocationRelativeTo(this);
         ventana.setVisible(true);
     }//GEN-LAST:event_btnEspaciosActionPerformed
 
     private void btnContratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContratoActionPerformed
-        vista.VentanaContrato ventana = new vista.VentanaContrato(
-                controladorPrincipal.getControladorContrato(),
-                controladorPrincipal.getControladorCliente());
-        ventana.setLocationRelativeTo(null);
+        vista.VentanaContrato ventana = new vista.VentanaContrato(controladorPrincipal.getControladorContrato(),controladorPrincipal.getControladorCliente());
+        ventana.setLocationRelativeTo(this);
         ventana.setVisible(true);
     }//GEN-LAST:event_btnContratoActionPerformed
 
     private void btnServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServicioActionPerformed
-        VentanaServicio ventana = new VentanaServicio(
-            controladorPrincipal.getControladorServicio());
-    ventana.setLocationRelativeTo(null);
+        VentanaServicio ventana = new VentanaServicio(controladorPrincipal.getControladorServicio());
+    ventana.setLocationRelativeTo(this);
     ventana.setVisible(true);
     }//GEN-LAST:event_btnServicioActionPerformed
 
@@ -264,6 +258,7 @@ public class FrmVentanaPrincipal extends javax.swing.JFrame {
     public static void main(String args[]) {
      ControladorPrincipal controladorPrincipal = new ControladorPrincipal();
     FrmVentanaPrincipal ventana = new FrmVentanaPrincipal(controladorPrincipal);
+    ventana.setLocationRelativeTo(null);
     ventana.setVisible(true);
     }
 
