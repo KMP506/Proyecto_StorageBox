@@ -3,6 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package vista;
+import controlador.ControladorCliente;
+import Modelo.excepciones.IdentificacionDuplicadaException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import Modelo.excepciones.ClienteConContratosException;
+import Modelo.Cliente;
 
 import javax.swing.JOptionPane;
 
@@ -13,15 +19,35 @@ import javax.swing.JOptionPane;
  * @author monto
  */
 public class FrmVentanaCliente extends javax.swing.JFrame {
-    public FrmVentanaCliente() {
-    initComponents();
-}
-    public static void main(String args[]) {
-
-    java.awt.EventQueue.invokeLater(() -> new FrmVentanaCliente().setVisible(true));
-
-}
+    
+    private ControladorCliente controlador;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmVentanaCliente.class.getName());
+
+    public FrmVentanaCliente(ControladorCliente controlador) {
+    initComponents();
+    this.controlador = controlador;
+}
+    public void cargarCliente(Cliente cliente){
+        txtCedula.setText(cliente.getId());
+        String nombreCompleto= cliente.getNombreCompleto();
+        String nombre=nombreCompleto;
+        String apellido= "";
+
+        String[] partes = nombreCompleto.split(" ", 2);
+
+        if(partes.length>0){
+            nombre= partes[0];
+        }
+
+        if(partes.length> 1){
+            apellido= partes[1];
+        }
+
+        txtnombre.setText(nombre);
+        txtapellido.setText(apellido);
+        txttelefono.setText(cliente.getTelefono());
+        txtemail.setText(cliente.getCorreoElectronico());
+}
 
     /**
      * Creates new form FrmVentanaCliente
@@ -50,10 +76,13 @@ public class FrmVentanaCliente extends javax.swing.JFrame {
         txtnombre = new javax.swing.JTextField();
         txtapellido = new javax.swing.JTextField();
         txttelefono = new javax.swing.JTextField();
+        txtCedula = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
         txtemail = new javax.swing.JTextField();
-        txtdirección = new javax.swing.JTextField();
+        dcFechaNacimiento = new com.toedter.calendar.JDateChooser();
+        btnActualizar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel1.setText("         Sistema de Géstion de Clientes");
@@ -79,7 +108,7 @@ public class FrmVentanaCliente extends javax.swing.JFrame {
 
         jLabel5.setText("Email");
 
-        jLabel6.setText("Dirección");
+        jLabel6.setText("Cedula");
 
         txtnombre.addActionListener(this::txtnombreActionPerformed);
 
@@ -87,46 +116,52 @@ public class FrmVentanaCliente extends javax.swing.JFrame {
 
         txttelefono.addActionListener(this::txttelefonoActionPerformed);
 
+        txtCedula.addActionListener(this::txtCedulaActionPerformed);
+
+        jLabel7.setText("Fecha de nacimiento");
+
         txtemail.addActionListener(this::txtemailActionPerformed);
 
-        txtdirección.addActionListener(this::txtdirecciónActionPerformed);
+        btnActualizar.setText("Actualizar");
+        btnActualizar.addActionListener(this::btnActualizarActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnGuardar)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
-                                        .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txtnombre)
-                                        .addComponent(txtapellido)
-                                        .addComponent(txttelefono)
-                                        .addComponent(txtemail)
-                                        .addComponent(txtdirección, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))))))
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(62, 62, 62)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(dcFechaNacimiento, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtapellido, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                                .addComponent(txtnombre, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txttelefono, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtCedula, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                                .addComponent(txtemail, javax.swing.GroupLayout.Alignment.LEADING))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(164, 164, 164)
+                        .addComponent(btnGuardar)
+                        .addGap(18, 18, 18)
                         .addComponent(btnLimpiar)
-                        .addGap(49, 49, 49)
+                        .addGap(18, 18, 18)
                         .addComponent(Cancelar)
-                        .addGap(77, 77, 77)
-                        .addComponent(btnEliminar)))
-                .addContainerGap(74, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEliminar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnActualizar)))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -135,153 +170,149 @@ public class FrmVentanaCliente extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtnombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtapellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(txtapellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel4))
                     .addComponent(txttelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(txtemail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(txtdirección, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(92, 92, 92)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(dcFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(54, 54, 54)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar)
                     .addComponent(btnLimpiar)
                     .addComponent(Cancelar)
-                    .addComponent(btnEliminar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnEliminar)
+                    .addComponent(btnActualizar))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtnombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnombreActionPerformed
-      txtapellido.requestFocus();
+      
     }//GEN-LAST:event_txtnombreActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         txtnombre.setText("");
-    txtapellido.setText("");
-    txttelefono.setText("");
-    txtemail.setText("");
-    txtdirección.setText("");
-
-    txtnombre.requestFocus();
-    }//GEN-LAST:event_btnLimpiarActionPerformed
-
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-         String nombre = txtnombre.getText().trim();
-    String apellido = txtapellido.getText().trim();
-    String telefono = txttelefono.getText().trim();
-    String email = txtemail.getText().trim();
-    String direccion = txtdirección.getText().trim();
-
-    if (nombre.isEmpty() || apellido.isEmpty() ||
-        telefono.isEmpty() || email.isEmpty() ||
-        direccion.isEmpty()) {
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Debe completar todos los campos.",
-                "Campos vacíos",
-                JOptionPane.WARNING_MESSAGE
-        );
-
-        return;
-    }
-
-    JOptionPane.showMessageDialog(
-            this,
-            "Cliente guardado correctamente.",
-            "Guardar Cliente",
-            JOptionPane.INFORMATION_MESSAGE
-    );
-    }//GEN-LAST:event_btnGuardarActionPerformed
-
-    private void txtapellidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtapellidoActionPerformed
-       txttelefono.requestFocus();
-    }//GEN-LAST:event_txtapellidoActionPerformed
-
-    private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
-    int opcion = JOptionPane.showConfirmDialog(
-            this,
-            "¿Está seguro que desea cancelar?",
-            "Cancelar",
-            JOptionPane.YES_NO_OPTION
-    );
-
-    if (opcion == JOptionPane.YES_OPTION) {
-
-        FrmVentanaPrincipal principal = new FrmVentanaPrincipal();
-
-        principal.setLocationRelativeTo(this);
-        principal.setVisible(true);
-
-        this.dispose();
-    }
-    }//GEN-LAST:event_CancelarActionPerformed
-
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-     String nombre = txtnombre.getText().trim();
-
-    if (nombre.isEmpty()) {
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Ingrese el nombre del cliente que desea eliminar.",
-                "Eliminar Cliente",
-                JOptionPane.WARNING_MESSAGE
-        );
-
-        return;
-    }
-
-    int opcion = JOptionPane.showConfirmDialog(
-            this,
-            "¿Está seguro que desea eliminar al cliente:\n"
-            + nombre + "?",
-            "Confirmar eliminación",
-            JOptionPane.YES_NO_OPTION
-    );
-
-    if (opcion == JOptionPane.YES_OPTION) {
-
-        txtnombre.setText("");
         txtapellido.setText("");
         txttelefono.setText("");
         txtemail.setText("");
-         txtdirección.setText("");
+        txtCedula.setText("");
+        dcFechaNacimiento.setDate(null);
+        txtnombre.requestFocus();
+    }//GEN-LAST:event_btnLimpiarActionPerformed
 
-        JOptionPane.showMessageDialog(
-                this,
-                "Cliente eliminado correctamente.",
-                "Eliminar Cliente",
-                JOptionPane.INFORMATION_MESSAGE
-        );
-    }
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        String cedula = txtCedula.getText().trim();
+        String nombre = txtnombre.getText().trim();
+        String apellido = txtapellido.getText().trim();
+        String telefono = txttelefono.getText().trim();
+        String email= txtemail.getText().trim();
+
+        if(cedula.isEmpty() || nombre.isEmpty() || apellido.isEmpty()||telefono.isEmpty() || email.isEmpty()|| dcFechaNacimiento.getDate() == null) {
+
+            JOptionPane.showMessageDialog(this, "Debe completar todos los campos.");
+            return;
+        }
+            String nombreCompleto = nombre + " " + apellido;
+
+            LocalDate fechaNacimiento= dcFechaNacimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        try{
+            controlador.agregarCliente(cedula, nombreCompleto, telefono, fechaNacimiento, email);
+            JOptionPane.showMessageDialog(this,"Cliente guardado correctamente.");
+        }catch(IdentificacionDuplicadaException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void txtapellidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtapellidoActionPerformed
+       
+    }//GEN-LAST:event_txtapellidoActionPerformed
+
+    private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
+    dispose();
+    }//GEN-LAST:event_CancelarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        String cedula = txtCedula.getText().trim();
+        if(cedula.isEmpty()){
+        JOptionPane.showMessageDialog(this, "Debe ingresar la cédula del cliente.");
+        return;
+        }
+
+        try{
+
+        boolean eliminado = controlador.eliminarCliente(cedula);
+
+        if(eliminado){
+            JOptionPane.showMessageDialog(this, "Cliente eliminado correctamente.");
+            txtCedula.setText("");
+            txtnombre.setText("");
+            txtapellido.setText("");
+            txttelefono.setText("");
+            txtemail.setText("");
+            dcFechaNacimiento.setDate(null);
+
+        }else{
+            JOptionPane.showMessageDialog(this, "No se encontró el cliente.");
+        }
+
+        }catch(ClienteConContratosException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void txttelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txttelefonoActionPerformed
-        txtemail.requestFocus();
+        
     }//GEN-LAST:event_txttelefonoActionPerformed
 
+    private void txtCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaActionPerformed
+        
+    }//GEN-LAST:event_txtCedulaActionPerformed
+
     private void txtemailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtemailActionPerformed
-            txtdirección.requestFocus();
+        // TODO add your handling code here:
     }//GEN-LAST:event_txtemailActionPerformed
 
-    private void txtdirecciónActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtdirecciónActionPerformed
-        btnGuardar.doClick();
-    }//GEN-LAST:event_txtdirecciónActionPerformed
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        String cedula = txtCedula.getText().trim();
+        String nombre = txtnombre.getText().trim();
+        String apellido = txtapellido.getText().trim();
+        String telefono = txttelefono.getText().trim();
+        String email = txtemail.getText().trim();
+        if(cedula.isEmpty()|| nombre.isEmpty() || apellido.isEmpty()|| telefono.isEmpty() ||email.isEmpty()){
+
+            JOptionPane.showMessageDialog(this,"Debe completar los datos del cliente.");
+            return;
+        }
+        String nombreCompleto= nombre + " " + apellido;
+
+        boolean actualizado=controlador.actualizarCliente(cedula, nombreCompleto, telefono, email);
+        if(actualizado){
+            JOptionPane.showMessageDialog(this, "Cliente actualizado correctamente.");
+        }else{
+            JOptionPane.showMessageDialog(this, "No se encontró el cliente.");
+        }
+    }//GEN-LAST:event_btnActualizarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -289,17 +320,20 @@ public class FrmVentanaCliente extends javax.swing.JFrame {
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cancelar;
+    private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
+    private com.toedter.calendar.JDateChooser dcFechaNacimiento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JTextField txtCedula;
     private javax.swing.JTextField txtapellido;
-    private javax.swing.JTextField txtdirección;
     private javax.swing.JTextField txtemail;
     private javax.swing.JTextField txtnombre;
     private javax.swing.JTextField txttelefono;
