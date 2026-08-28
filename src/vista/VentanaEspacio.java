@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package vista;
+import Modelo.Espacio;
 import controlador.ControladorEspacio;
 import Modelo.TipoEspacio;
 import Modelo.excepciones.EspacioDuplicadoException;
@@ -26,6 +27,14 @@ public class VentanaEspacio extends javax.swing.JFrame {
         initComponents();
         this.controlador= controlador;
     }
+    
+    public void cargarEspacio(Espacio espacio) {
+        txtNumero.setText(espacio.getNumeroEspacio());
+        cbTipo.setSelectedItem(espacio.getTipo().toString());
+        txtTamano.setText(String.valueOf(espacio.getTamanoM2()));
+        txtPrecio.setText(String.valueOf(espacio.getPrecioMensual()));
+        txtDisponibilidad.setText(espacio.getEstado().toString());
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -144,6 +153,7 @@ public class VentanaEspacio extends javax.swing.JFrame {
         jPanel3.add(btnEliminar);
 
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(this::btnBuscarActionPerformed);
         jPanel3.add(btnBuscar);
 
         btnLimpiar.setText("Limpiar");
@@ -286,6 +296,13 @@ public class VentanaEspacio extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "No se puede eliminar el espacio porque está ocupado.");
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        VentanaBuscarEspacio ventana=new VentanaBuscarEspacio(controlador, this);
+
+        ventana.setLocationRelativeTo(this);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
      * @param args the command line arguments
