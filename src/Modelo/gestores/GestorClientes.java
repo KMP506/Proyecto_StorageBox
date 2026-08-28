@@ -7,7 +7,8 @@ import Modelo.Cliente;
 import Modelo.excepciones.ClienteConContratosException;
 import java.util.ArrayList;
 import Modelo.gestores.GestorContratos;
-
+import java.time.LocalDate;
+import java.util.Set;
 /**
  *
  * @author isaac
@@ -33,12 +34,13 @@ public class GestorClientes {
         }
         return null;
     }
-    public boolean actualizar(String id, String nombre, String telefono, String correo){
+    public boolean actualizar(String id, String nombre, String telefono,LocalDate fechaNacimiento, String correo){
         Cliente cliente= buscar(id);
         
         if(cliente !=null){
             cliente.setNombreCompleto(nombre);
             cliente.setTelefono(telefono);
+            cliente.setFechaNacimiento(fechaNacimiento);
             cliente.setCorreoElectronico(correo);
             return true;
         }

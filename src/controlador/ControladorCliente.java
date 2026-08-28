@@ -47,18 +47,9 @@ public class ControladorCliente {
         return sistema.buscarCliente(id);
     }
 
-    public boolean actualizarCliente(
-            String id,
-            String nombre,
-            String telefono,
-            String correo) {
+    public boolean actualizarCliente(String id,String nombre,String telefono,LocalDate fechaNacimiento, String correo) {
 
-        return sistema.actualizarCliente(
-                id,
-                nombre,
-                telefono,
-                correo
-        );
+        return sistema.actualizarCliente(id, nombre, telefono, fechaNacimiento, correo);
     }
 
     public boolean eliminarCliente(String id)
