@@ -45,6 +45,11 @@ public class ServicioAdicional implements Cobrable {
         this.precio = precio;
     }
 
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    
+
     @Override
     public double calcularMonto() {
         return precio;

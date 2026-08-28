@@ -171,13 +171,14 @@ public class VentanaServicio extends javax.swing.JFrame {
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         String codigo=txtCodigo.getText().trim();
+        String nombre= txtNombre.getText().trim();
         String descripcion=txtDescripcion.getText().trim();
         if(codigo.isEmpty()){
             JOptionPane.showMessageDialog(this, "Primero debe buscar o seleccionar un servicio.");
             return;
         }
-        if(descripcion.isEmpty()|| txtPrecio.getText().trim().isEmpty()){
-            JOptionPane.showMessageDialog(this, "Debe completar la descripción y el precio.");
+        if (nombre.isEmpty() || descripcion.isEmpty()|| txtPrecio.getText().trim().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Debe completar el nombre, la descripción y el precio.");
             return;
         }
         double precio;
@@ -192,7 +193,7 @@ public class VentanaServicio extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this,"El precio debe ser un número válido.");
             return;
         }
-        boolean actualizado=controlador.actualizarServicio(codigo, descripcion, precio);
+        boolean actualizado=controlador.actualizarServicio(codigo, nombre, descripcion, precio);
         if(actualizado){
             JOptionPane.showMessageDialog(this, "Servicio actualizado correctamente.");
         }else{

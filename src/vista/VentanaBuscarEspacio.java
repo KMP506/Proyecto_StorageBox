@@ -249,6 +249,16 @@ public class VentanaBuscarEspacio extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Los precios deben ser números válidos.");
             return;
         }
+        
+        if(precioMin <0|| precioMax <0){
+            JOptionPane.showMessageDialog(this,"Los precios no pueden ser negativos.");
+            return;
+        }
+        
+        if(precioMin>precioMax){
+            JOptionPane.showMessageDialog(this, "El precio mínimo no puede ser mayor que el precio máximo.");
+            return;
+    }
 
         DefaultTableModel modelo=(DefaultTableModel)tblEspacios.getModel();
 

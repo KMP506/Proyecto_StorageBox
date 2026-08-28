@@ -30,10 +30,10 @@ public class ControladorServicio {
         return sistema.buscarServicio(codigo);
     }
  
-    public boolean actualizarServicio(String codigo,
+    public boolean actualizarServicio(String codigo, String nombre,
             String descripcion, double precio) {
  
-        return sistema.actualizarServicio(codigo, descripcion, precio);
+        return sistema.actualizarServicio(codigo,nombre, descripcion, precio);
     }
  
     public boolean eliminarServicio(String codigo) {

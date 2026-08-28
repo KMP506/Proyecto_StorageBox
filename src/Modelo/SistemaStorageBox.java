@@ -100,10 +100,9 @@ public ServicioAdicional agregarServicio(String nombre,
 public ServicioAdicional buscarServicio(String codigo) {
     return gestorServicios.buscar(codigo);
 }
-public boolean actualizarServicio(String codigo,
-        String descripcion, double precio) {
+public boolean actualizarServicio(String codigo, String nombre, String descripcion, double precio) {
 
-    return gestorServicios.actualizar(codigo, descripcion, precio);
+    return gestorServicios.actualizar(codigo,nombre, descripcion, precio);
 }
 public boolean eliminarServicio(String codigo) {
     return gestorServicios.eliminar(codigo);
