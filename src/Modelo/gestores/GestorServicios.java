@@ -41,7 +41,7 @@ public class GestorServicios {
         return null;
     }
     
-    public boolean actualizar(String nombre, String codigo, String descripcion, double precio){
+    public boolean actualizar(String codigo, String nombre, String descripcion, double precio){
         
         ServicioAdicional servicio=buscar(codigo);
         

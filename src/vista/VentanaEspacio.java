@@ -28,7 +28,7 @@ public class VentanaEspacio extends javax.swing.JFrame {
         this.controlador= controlador;
         
         txtTamano.setText(String.valueOf(TipoEspacio.Pequeño.getTamanoM2()));
-        txtTamano.setText(String.valueOf(TipoEspacio.Pequeño.getPrecioDefecto()));
+        txtPrecio.setText(String.valueOf(TipoEspacio.Pequeño.getPrecioDefecto()));
         txtDisponibilidad.setText("Disponible");
         
     }
