@@ -4,22 +4,29 @@
  */
 package vista;
 
-import controlador.ControladorCliente;
+import javax.swing.JOptionPane;
+
+
 
 /**
  *
  * @author monto
  */
 public class FrmVentanaCliente extends javax.swing.JFrame {
-    
+    public FrmVentanaCliente() {
+    initComponents();
+}
+    public static void main(String args[]) {
+
+    java.awt.EventQueue.invokeLater(() -> new FrmVentanaCliente().setVisible(true));
+
+}
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmVentanaCliente.class.getName());
 
     /**
      * Creates new form FrmVentanaCliente
      */
-    public FrmVentanaCliente(ControladorCliente controladorCliente) {
-        initComponents();
-    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -40,11 +47,11 @@ public class FrmVentanaCliente extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
+        txtnombre = new javax.swing.JTextField();
+        txtapellido = new javax.swing.JTextField();
+        txttelefono = new javax.swing.JTextField();
+        txtemail = new javax.swing.JTextField();
+        txtdirección = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -53,13 +60,16 @@ public class FrmVentanaCliente extends javax.swing.JFrame {
         jLabel1.setToolTipText("");
 
         btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(this::btnGuardarActionPerformed);
 
         btnLimpiar.setText("Limpiar");
         btnLimpiar.addActionListener(this::btnLimpiarActionPerformed);
 
         Cancelar.setText("Cancelar");
+        Cancelar.addActionListener(this::CancelarActionPerformed);
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(this::btnEliminarActionPerformed);
 
         jLabel2.setText("Nombre");
 
@@ -71,7 +81,15 @@ public class FrmVentanaCliente extends javax.swing.JFrame {
 
         jLabel6.setText("Dirección");
 
-        jTextField1.addActionListener(this::jTextField1ActionPerformed);
+        txtnombre.addActionListener(this::txtnombreActionPerformed);
+
+        txtapellido.addActionListener(this::txtapellidoActionPerformed);
+
+        txttelefono.addActionListener(this::txttelefonoActionPerformed);
+
+        txtemail.addActionListener(this::txtemailActionPerformed);
+
+        txtdirección.addActionListener(this::txtdirecciónActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -96,11 +114,11 @@ public class FrmVentanaCliente extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jTextField1)
-                                        .addComponent(jTextField2)
-                                        .addComponent(jTextField3)
-                                        .addComponent(jTextField4)
-                                        .addComponent(jTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))))))
+                                        .addComponent(txtnombre)
+                                        .addComponent(txtapellido)
+                                        .addComponent(txttelefono)
+                                        .addComponent(txtemail)
+                                        .addComponent(txtdirección, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(164, 164, 164)
                         .addComponent(btnLimpiar)
@@ -118,23 +136,23 @@ public class FrmVentanaCliente extends javax.swing.JFrame {
                 .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtnombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtapellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txttelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtemail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtdirección, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(92, 92, 92)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar)
@@ -147,39 +165,128 @@ public class FrmVentanaCliente extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    private void txtnombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnombreActionPerformed
+      txtapellido.requestFocus();
+    }//GEN-LAST:event_txtnombreActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-        // TODO add your handling code here:
+        txtnombre.setText("");
+    txtapellido.setText("");
+    txttelefono.setText("");
+    txtemail.setText("");
+    txtdirección.setText("");
+
+    txtnombre.requestFocus();
     }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+         String nombre = txtnombre.getText().trim();
+    String apellido = txtapellido.getText().trim();
+    String telefono = txttelefono.getText().trim();
+    String email = txtemail.getText().trim();
+    String direccion = txtdirección.getText().trim();
+
+    if (nombre.isEmpty() || apellido.isEmpty() ||
+        telefono.isEmpty() || email.isEmpty() ||
+        direccion.isEmpty()) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Debe completar todos los campos.",
+                "Campos vacíos",
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        return;
+    }
+
+    JOptionPane.showMessageDialog(
+            this,
+            "Cliente guardado correctamente.",
+            "Guardar Cliente",
+            JOptionPane.INFORMATION_MESSAGE
+    );
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void txtapellidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtapellidoActionPerformed
+       txttelefono.requestFocus();
+    }//GEN-LAST:event_txtapellidoActionPerformed
+
+    private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
+    int opcion = JOptionPane.showConfirmDialog(
+            this,
+            "¿Está seguro que desea cancelar?",
+            "Cancelar",
+            JOptionPane.YES_NO_OPTION
+    );
+
+    if (opcion == JOptionPane.YES_OPTION) {
+
+        FrmVentanaPrincipal principal = new FrmVentanaPrincipal();
+
+        principal.setLocationRelativeTo(this);
+        principal.setVisible(true);
+
+        this.dispose();
+    }
+    }//GEN-LAST:event_CancelarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+     String nombre = txtnombre.getText().trim();
+
+    if (nombre.isEmpty()) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Ingrese el nombre del cliente que desea eliminar.",
+                "Eliminar Cliente",
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        return;
+    }
+
+    int opcion = JOptionPane.showConfirmDialog(
+            this,
+            "¿Está seguro que desea eliminar al cliente:\n"
+            + nombre + "?",
+            "Confirmar eliminación",
+            JOptionPane.YES_NO_OPTION
+    );
+
+    if (opcion == JOptionPane.YES_OPTION) {
+
+        txtnombre.setText("");
+        txtapellido.setText("");
+        txttelefono.setText("");
+        txtemail.setText("");
+         txtdirección.setText("");
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Cliente eliminado correctamente.",
+                "Eliminar Cliente",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void txttelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txttelefonoActionPerformed
+        txtemail.requestFocus();
+    }//GEN-LAST:event_txttelefonoActionPerformed
+
+    private void txtemailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtemailActionPerformed
+            txtdirección.requestFocus();
+    }//GEN-LAST:event_txtemailActionPerformed
+
+    private void txtdirecciónActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtdirecciónActionPerformed
+        btnGuardar.doClick();
+    }//GEN-LAST:event_txtdirecciónActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FrmVentanaCliente(ControladorPrincipal.getControladorCliente()).setVisible(true));
-    }
-
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cancelar;
     private javax.swing.JButton btnEliminar;
@@ -191,10 +298,10 @@ public class FrmVentanaCliente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField txtapellido;
+    private javax.swing.JTextField txtdirección;
+    private javax.swing.JTextField txtemail;
+    private javax.swing.JTextField txtnombre;
+    private javax.swing.JTextField txttelefono;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,6 +4,8 @@
  */
 package vista;
 
+import javax.swing.JOptionPane;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -14,14 +16,17 @@ package vista;
 
 
 public class FrmVentanaPrincipal extends javax.swing.JFrame {
-    
+   
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmVentanaPrincipal.class.getName());
 
     /**
      * Creates new form FrmVentanaPrincipal
      */
+    
+    
     public FrmVentanaPrincipal() {
-     
+      initComponents();
+   
     }
 
     /**
@@ -34,33 +39,36 @@ public class FrmVentanaPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
         btnBuscarCliente = new javax.swing.JButton();
         btnEliminarCliente = new javax.swing.JButton();
         btnEditarCliente = new javax.swing.JTextField();
         btnClientes = new javax.swing.JButton();
         btnNuevoCliente = new javax.swing.JTextField();
         btnSalir = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jTextField1.setText("               Ventana principal");
-        jTextField1.addActionListener(this::jTextField1ActionPerformed);
 
         btnBuscarCliente.setText("Buscar Cliente");
         btnBuscarCliente.addActionListener(this::btnBuscarClienteActionPerformed);
 
         btnEliminarCliente.setText("Eliminar cliente");
+        btnEliminarCliente.addActionListener(this::btnEliminarClienteActionPerformed);
 
         btnEditarCliente.setText("Editar Cliente");
         btnEditarCliente.addActionListener(this::btnEditarClienteActionPerformed);
 
         btnClientes.setText("Clientes");
+        btnClientes.addActionListener(this::btnClientesActionPerformed);
 
         btnNuevoCliente.setText("Nuevo Cliente");
         btnNuevoCliente.addActionListener(this::btnNuevoClienteActionPerformed);
 
         btnSalir.setText("Salir");
+        btnSalir.addActionListener(this::btnSalirActionPerformed);
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI Black", 2, 18)); // NOI18N
+        jLabel1.setText("Ventana Principal");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -72,23 +80,23 @@ public class FrmVentanaPrincipal extends javax.swing.JFrame {
                     .addComponent(btnEliminarCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnBuscarCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnEditarCliente))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 148, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnNuevoCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
                     .addComponent(btnClientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnSalir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(47, 47, 47))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(120, 120, 120)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(127, Short.MAX_VALUE))
+                .addGap(97, 97, 97)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(71, 71, 71)
+                .addComponent(jLabel1)
+                .addGap(77, 77, 77)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBuscarCliente)
                     .addComponent(btnClientes))
@@ -100,7 +108,7 @@ public class FrmVentanaPrincipal extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEditarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSalir))
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addContainerGap(87, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -117,21 +125,72 @@ public class FrmVentanaPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
-        // TODO add your handling code here:
+ FrmBuscarCliente ventana = new FrmBuscarCliente();
+
+    ventana.setLocationRelativeTo(this);
+    ventana.setVisible(true);
+
+    this.setVisible(false);    
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
 
     private void btnEditarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarClienteActionPerformed
-        // TODO add your handling code here:
+        FrmVentanaCliente ventana = new FrmVentanaCliente();
+
+    ventana.setLocationRelativeTo(this);
+    ventana.setVisible(true);
+
+    this.setVisible(false);
     }//GEN-LAST:event_btnEditarClienteActionPerformed
 
     private void btnNuevoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoClienteActionPerformed
-     
+      FrmVentanaCliente ventana = new FrmVentanaCliente();
+
+    ventana.setLocationRelativeTo(this);
+    ventana.setVisible(true);
+
+    this.setVisible(false);     
     }//GEN-LAST:event_btnNuevoClienteActionPerformed
+
+    private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
+      FrmVentanaCliente ventana = new FrmVentanaCliente();
+
+    ventana.setLocationRelativeTo(this);
+    ventana.setVisible(true);
+
+    this.setVisible(false);
+    }//GEN-LAST:event_btnClientesActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+       int opcion = JOptionPane.showConfirmDialog(
+            this,
+            "¿Está seguro que desea salir?",
+            "Salir",
+            JOptionPane.YES_NO_OPTION
+    );
+
+    if (opcion == JOptionPane.YES_OPTION) {
+        System.exit(0);
+    }
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnEliminarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarClienteActionPerformed
+        int opcion = JOptionPane.showConfirmDialog(
+            this,
+            "¿Desea abrir la ventana de clientes para eliminar un cliente?",
+            "Eliminar Cliente",
+            JOptionPane.YES_NO_OPTION
+    );
+
+    if (opcion == JOptionPane.YES_OPTION) {
+        FrmVentanaCliente ventana = new FrmVentanaCliente();
+
+        ventana.setLocationRelativeTo(this);
+        ventana.setVisible(true);
+
+        this.setVisible(false);
+    }
+    }//GEN-LAST:event_btnEliminarClienteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -165,7 +224,7 @@ public class FrmVentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnEliminarCliente;
     private javax.swing.JTextField btnNuevoCliente;
     private javax.swing.JButton btnSalir;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
