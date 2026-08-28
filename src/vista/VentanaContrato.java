@@ -82,6 +82,9 @@ public class VentanaContrato extends javax.swing.JFrame {
         txtEstado.setText(contrato.getEstado().toString());
         txtEspacioAsignado.setText(contrato.getEspacio().getNumeroEspacio());
         cboTipoEspacio.setSelectedItem(contrato.getEspacio().getTipo().toString());
+        dcFechaInicio.setDate(
+        java.sql.Date.valueOf(contrato.getFechaInicio()));dcFechaFin.setDate(
+        java.sql.Date.valueOf(contrato.getFechaFin()));
         txtSubtotal.setText(String.valueOf(contrato.calcularSubtotal()));
         txtImpuesto.setText(String.valueOf(contrato.calcularImpuesto()));
         
@@ -777,10 +780,9 @@ public class VentanaContrato extends javax.swing.JFrame {
         LocalDate fechaInicio = convertirFecha(dcFechaInicio);
         LocalDate fechaFin = convertirFecha(dcFechaFin);
 
-        if(fechaFin.isBefore(fechaInicio)){
-            JOptionPane.showMessageDialog(this, "La fecha final debe ser posterior a la fecha inicial.");
-            return;
-        }
+   if(!fechaFin.isAfter(fechaInicio)){JOptionPane.showMessageDialog(this,"La fecha final debe ser posterior a la fecha inicial.");
+    return;
+}
 
         String tipoTexto = cboTipoEspacio.getSelectedItem().toString();
         TipoEspacio tipo = TipoEspacio.valueOf(tipoTexto);
