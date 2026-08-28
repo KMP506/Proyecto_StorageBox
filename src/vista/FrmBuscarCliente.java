@@ -16,12 +16,18 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FrmBuscarCliente extends javax.swing.JFrame {
     private ControladorCliente controladorCliente;
-private java.awt.Window ventanaAnterior;
-private DefaultTableModel modeloTabla;
+    private DefaultTableModel modeloTabla;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmBuscarCliente.class.getName());
 
-    FrmBuscarCliente() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public FrmBuscarCliente(ControladorCliente controladorCliente) {
+        initComponents();
+
+        this.controladorCliente= controladorCliente;
+        modeloTabla= new DefaultTableModel(
+            new Object[]{"Cédula", "Nombre", "Apellido", "Teléfono", "Correo"}, 0);
+
+        jTable1.setModel(modeloTabla);
+        setLocationRelativeTo(null);
     }
 private void agregarClienteTabla(Cliente cliente) {
 
@@ -51,29 +57,6 @@ private void agregarClienteTabla(Cliente cliente) {
     /**
      * Creates new form FrmBuscarCliente
      */
-public FrmBuscarCliente(ControladorCliente controladorCliente,
-                        java.awt.Window ventanaAnterior) {
-
-    initComponents();
-
-    this.controladorCliente = controladorCliente;
-    this.ventanaAnterior = ventanaAnterior;
-
-    modeloTabla = new DefaultTableModel(
-        new Object[]{
-            "Cédula",
-            "Nombre",
-            "Apellido",
-            "Teléfono",
-            "Correo"
-        }, 0
-    );
-
-    jTable1.setModel(modeloTabla);
-
-    setLocationRelativeTo(null);
-}
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -95,7 +78,7 @@ public FrmBuscarCliente(ControladorCliente controladorCliente,
         btnLimpiar = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Emoji", 3, 24)); // NOI18N
         jLabel1.setText("Buscar clientes");
@@ -111,7 +94,15 @@ public FrmBuscarCliente(ControladorCliente controladorCliente,
             new String [] {
                 "Cédula", "Nombre", "Apellido", "Teléfono", "Correo"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         jLabel2.setText("Buscar por :");
@@ -119,7 +110,6 @@ public FrmBuscarCliente(ControladorCliente controladorCliente,
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cédula", "Nombre", "Teléfono", "Correo" }));
         jComboBox2.addActionListener(this::jComboBox2ActionPerformed);
 
-        btntext.setText("jTextField1");
         btntext.addActionListener(this::btntextActionPerformed);
 
         btnBuscar.setText("Buscar");
@@ -311,6 +301,7 @@ public FrmBuscarCliente(ControladorCliente controladorCliente,
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         
     btnBuscar.setText("");
+    modeloTabla.setRowCount(0);
     btnBuscar.requestFocus();
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
@@ -367,27 +358,6 @@ public FrmBuscarCliente(ControladorCliente controladorCliente,
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FrmBuscarCliente().setVisible(true));
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
