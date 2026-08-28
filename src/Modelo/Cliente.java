@@ -27,6 +27,10 @@ public class Cliente extends Persona{
         return this.fechaNacimiento;
     }
     
+    public void setFechaNacimiento(LocalDate fechaNacimiento){
+    this.fechaNacimiento = fechaNacimiento;
+}
+    
     public String getCorreoElectronico(){
         return this.correoElectronico;
     }

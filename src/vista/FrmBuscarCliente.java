@@ -196,7 +196,6 @@ private void agregarClienteTabla(Cliente cliente) {
          String criterio = jComboBox2.getSelectedItem().toString();
 
     btntext.setText("");
-    btntext.requestFocus();
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
     private void btntextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btntextActionPerformed
@@ -210,12 +209,8 @@ private void agregarClienteTabla(Cliente cliente) {
                 "Buscar cliente",
                 JOptionPane.WARNING_MESSAGE
         );
-
-        btntext.requestFocus();
         return;
-    }
-
-    btnBuscar.doClick();
+        }
     }//GEN-LAST:event_btntextActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -300,59 +295,38 @@ private void agregarClienteTabla(Cliente cliente) {
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         
-    btnBuscar.setText("");
+    btntext.setText("");
     modeloTabla.setRowCount(0);
-    btnBuscar.requestFocus();
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+
+        dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
-       
+        int fila = jTable1.getSelectedRow();
+        if(fila ==-1){
+            JOptionPane.showMessageDialog(this,"Seleccione un cliente de la tabla.","Seleccionar cliente",JOptionPane.WARNING_MESSAGE);
 
-    int fila = jTable1.getSelectedRow();
+            return;
+        }
+        String cedula =jTable1.getValueAt(fila, 0).toString();
+        Cliente cliente= controladorCliente.buscarCliente(cedula);
 
-    if (fila == -1) {
+        if(cliente==null){
+            JOptionPane.showMessageDialog(this,"No se encontró el cliente.","Error",JOptionPane.ERROR_MESSAGE
+            );
 
-        JOptionPane.showMessageDialog(
-                this,
-                "Seleccione un cliente de la tabla.",
-                "Seleccionar cliente",
-                JOptionPane.WARNING_MESSAGE
-        );
+            return;
+        }
 
-        return;
-    }
+        FrmVentanaCliente ventana=new FrmVentanaCliente(controladorCliente);
+        ventana.cargarCliente(cliente);
+        ventana.setLocationRelativeTo(this);
+        ventana.setVisible(true);
 
-    String cedula =
-            jTable1.getValueAt(fila, 0).toString();
-
-    Cliente cliente =
-            controladorCliente.buscarCliente(cedula);
-
-    if (cliente == null) {
-
-        JOptionPane.showMessageDialog(
-                this,
-                "No se encontró el cliente.",
-                "Error",
-                JOptionPane.ERROR_MESSAGE
-        );
-
-        return;
-    }
-
-    JOptionPane.showMessageDialog(
-            this,
-            "Cliente seleccionado:\n\n"
-            + "Cédula: " + cliente.getId()
-            + "\nNombre: " + cliente.getNombreCompleto()
-            + "\nTeléfono: " + cliente.getTelefono()
-            + "\nCorreo: " + cliente.getCorreoElectronico(),
-            "Cliente seleccionado",
-            JOptionPane.INFORMATION_MESSAGE
-    );
+        dispose();
     }//GEN-LAST:event_btnSeleccionarActionPerformed
 
     /**

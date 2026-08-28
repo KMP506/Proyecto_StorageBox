@@ -64,9 +64,8 @@ public class SistemaStorageBox {
     public Cliente buscarCliente(String id) {
         return gestorClientes.buscar(id);
     }
-    public boolean actualizarCliente(String id, String nombre,
-            String telefono, String correo) {
-        return gestorClientes.actualizar(id, nombre, telefono, correo);
+    public boolean actualizarCliente(String id, String nombre,String telefono,LocalDate fechaNacimiento, String correo) {
+        return gestorClientes.actualizar(id, nombre, telefono,fechaNacimiento,  correo);
     }
     public boolean eliminarCliente(String id)throws ClienteConContratosException {
         return gestorClientes.eliminar(id, gestorContratos);

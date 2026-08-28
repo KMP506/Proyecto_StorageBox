@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import Modelo.excepciones.ClienteConContratosException;
 import Modelo.Cliente;
+import java.util.Date;
 
 import javax.swing.JOptionPane;
 
@@ -47,6 +48,11 @@ public class FrmVentanaCliente extends javax.swing.JFrame {
         txtapellido.setText(apellido);
         txttelefono.setText(cliente.getTelefono());
         txtemail.setText(cliente.getCorreoElectronico());
+        LocalDate fecha = cliente.getFechaNacimiento();
+
+        dcFechaNacimiento.setDate(Date.from(fecha.atStartOfDay(ZoneId.systemDefault()).toInstant()
+        )
+);
 }
 
     /**
@@ -299,18 +305,19 @@ public class FrmVentanaCliente extends javax.swing.JFrame {
         String apellido = txtapellido.getText().trim();
         String telefono = txttelefono.getText().trim();
         String email = txtemail.getText().trim();
-        if(cedula.isEmpty()|| nombre.isEmpty() || apellido.isEmpty()|| telefono.isEmpty() ||email.isEmpty()){
+        if(cedula.isEmpty()|| nombre.isEmpty() || apellido.isEmpty()|| telefono.isEmpty() ||email.isEmpty()|| dcFechaNacimiento.getDate()==null){
 
             JOptionPane.showMessageDialog(this,"Debe completar los datos del cliente.");
             return;
         }
         String nombreCompleto= nombre + " " + apellido;
-
-        boolean actualizado=controlador.actualizarCliente(cedula, nombreCompleto, telefono, email);
+        LocalDate fechaNacimiento = dcFechaNacimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        
+        boolean actualizado=controlador.actualizarCliente(cedula, nombreCompleto, telefono,fechaNacimiento, email);
         if(actualizado){
             JOptionPane.showMessageDialog(this, "Cliente actualizado correctamente.");
         }else{
-            JOptionPane.showMessageDialog(this, "No se encontró el cliente.");
+            JOptionPane.showMessageDialog(this, "No se encontró el cliente");
         }
     }//GEN-LAST:event_btnActualizarActionPerformed
 

@@ -26,6 +26,11 @@ public class VentanaEspacio extends javax.swing.JFrame {
     public VentanaEspacio(ControladorEspacio controlador) {
         initComponents();
         this.controlador= controlador;
+        
+        txtTamano.setText(String.valueOf(TipoEspacio.Pequeño.getTamanoM2()));
+        txtTamano.setText(String.valueOf(TipoEspacio.Pequeño.getPrecioDefecto()));
+        txtDisponibilidad.setText("Disponible");
+        
     }
     
     public void cargarEspacio(Espacio espacio) {
@@ -191,7 +196,7 @@ public class VentanaEspacio extends javax.swing.JFrame {
         
         double precio;
         try{
-        precio= Double.parseDouble(txtPrecio.getText());
+        precio= Double.parseDouble(txtPrecio.getText().trim());
 
         if(precio<=0){
             JOptionPane.showMessageDialog(this, "El precio debe ser mayor que cero.");
@@ -268,6 +273,10 @@ public class VentanaEspacio extends javax.swing.JFrame {
         try{
 
         double precio= Double.parseDouble(txtPrecio.getText().trim());
+        if (precio <= 0) {
+            JOptionPane.showMessageDialog(this,"El precio debe ser mayor que cero.");
+            return;
+        }
         controlador.agregarEspacio(numero, tipo, precio);
         JOptionPane.showMessageDialog(this, "Espacio agregado correctamente.");
     }catch(NumberFormatException ex){
