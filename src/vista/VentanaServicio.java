@@ -219,7 +219,7 @@ public class VentanaServicio extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        FrmVentanaBuscarServicio ventana=new FrmVentanaBuscarServicio(controlador);
+        FrmVentanaBuscarServicio ventana=new FrmVentanaBuscarServicio(controlador, this);
 
         ventana.setLocationRelativeTo(this);
         ventana.setVisible(true);

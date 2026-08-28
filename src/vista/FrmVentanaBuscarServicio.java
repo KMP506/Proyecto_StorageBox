@@ -18,12 +18,14 @@ public class FrmVentanaBuscarServicio extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmVentanaBuscarServicio.class.getName());
     private ControladorServicio controladorServicio;
+    private VentanaServicio ventanaServicio;
     /**
      * Creates new form FrmVentanaBuscarServicio
      */
-    public FrmVentanaBuscarServicio(ControladorServicio controladorServicio) {
+    public FrmVentanaBuscarServicio(ControladorServicio controladorServicio, VentanaServicio ventanaServicio) {
         initComponents();
         this.controladorServicio = controladorServicio;
+        this.ventanaServicio= ventanaServicio;
         cargarTabla(controladorServicio.listarServicios());
     }
 
@@ -43,6 +45,7 @@ public class FrmVentanaBuscarServicio extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         btnEliminar = new javax.swing.JButton();
         btnCerrar = new javax.swing.JButton();
+        btnAceptar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         txtCodigo = new javax.swing.JTextField();
@@ -108,12 +111,18 @@ public class FrmVentanaBuscarServicio extends javax.swing.JFrame {
         btnCerrar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnCerrar.addActionListener(this::btnCerrarActionPerformed);
 
+        btnAceptar.setText("Aceptar");
+        btnAceptar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnAceptar.addActionListener(this::btnAceptarActionPerformed);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -125,7 +134,8 @@ public class FrmVentanaBuscarServicio extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEliminar)
-                    .addComponent(btnCerrar))
+                    .addComponent(btnCerrar)
+                    .addComponent(btnAceptar))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
 
@@ -250,6 +260,18 @@ public class FrmVentanaBuscarServicio extends javax.swing.JFrame {
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed
+
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        int fila = tblServicio.getSelectedRow();
+        if(fila == -1){
+            JOptionPane.showMessageDialog(this,"Debe seleccionar un servicio.");
+            return;
+        }
+        String codigo= tblServicio.getValueAt(fila, 0).toString();
+        ServicioAdicional servicio=controladorServicio.buscarServicio(codigo);
+        ventanaServicio.cargarServicio(servicio);
+        dispose();
+    }//GEN-LAST:event_btnAceptarActionPerformed
     
     private void cargarTabla(ArrayList<ServicioAdicional> servicios) {
         DefaultTableModel modelo= (DefaultTableModel) tblServicio.getModel();
@@ -268,6 +290,7 @@ public class FrmVentanaBuscarServicio extends javax.swing.JFrame {
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnEliminar;
