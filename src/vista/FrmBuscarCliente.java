@@ -3,21 +3,76 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package vista;
+import controlador.ControladorCliente;
+import Modelo.Cliente;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 
 /**
  *
  * @author monto
  */
 public class FrmBuscarCliente extends javax.swing.JFrame {
-    
+    private ControladorCliente controladorCliente;
+private java.awt.Window ventanaAnterior;
+private DefaultTableModel modeloTabla;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmBuscarCliente.class.getName());
 
+    FrmBuscarCliente() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+private void agregarClienteTabla(Cliente cliente) {
+
+    String nombreCompleto = cliente.getNombreCompleto();
+
+    String nombre = nombreCompleto;
+    String apellido = "";
+
+    String[] partes = nombreCompleto.split(" ", 2);
+
+    if (partes.length > 0) {
+        nombre = partes[0];
+    }
+
+    if (partes.length > 1) {
+        apellido = partes[1];
+    }
+
+    modeloTabla.addRow(new Object[]{
+        cliente.getId(),
+        nombre,
+        apellido,
+        cliente.getTelefono(),
+        cliente.getCorreoElectronico()
+    });
+}
     /**
      * Creates new form FrmBuscarCliente
      */
-    public FrmBuscarCliente() {
-        initComponents();
-    }
+public FrmBuscarCliente(ControladorCliente controladorCliente,
+                        java.awt.Window ventanaAnterior) {
+
+    initComponents();
+
+    this.controladorCliente = controladorCliente;
+    this.ventanaAnterior = ventanaAnterior;
+
+    modeloTabla = new DefaultTableModel(
+        new Object[]{
+            "Cédula",
+            "Nombre",
+            "Apellido",
+            "Teléfono",
+            "Correo"
+        }, 0
+    );
+
+    jTable1.setModel(modeloTabla);
+
+    setLocationRelativeTo(null);
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -71,10 +126,13 @@ public class FrmBuscarCliente extends javax.swing.JFrame {
         btnBuscar.addActionListener(this::btnBuscarActionPerformed);
 
         btnSeleccionar.setText("Seleccionar");
+        btnSeleccionar.addActionListener(this::btnSeleccionarActionPerformed);
 
         btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(this::btnLimpiarActionPerformed);
 
         btnVolver.setText("Volver");
+        btnVolver.addActionListener(this::btnVolverActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -103,7 +161,7 @@ public class FrmBuscarCliente extends javax.swing.JFrame {
                         .addComponent(btnSeleccionar)
                         .addGap(58, 58, 58)
                         .addComponent(btnLimpiar)
-                        .addGap(69, 69, 69)
+                        .addGap(40, 40, 40)
                         .addComponent(btnVolver)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -145,16 +203,166 @@ public class FrmBuscarCliente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-        // TODO add your handling code here:
+         String criterio = jComboBox2.getSelectedItem().toString();
+
+    btntext.setText("");
+    btntext.requestFocus();
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
     private void btntextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btntextActionPerformed
-        // TODO add your handling code here:
+  String texto = btntext.getText().trim();
+
+    if (texto.isEmpty()) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Ingrese un dato para buscar.",
+                "Buscar cliente",
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        btntext.requestFocus();
+        return;
+    }
+
+    btnBuscar.doClick();
     }//GEN-LAST:event_btntextActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-       
+    String texto = btntext.getText().trim();
+
+    if (texto.isEmpty()) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Ingrese un dato para buscar.",
+                "Buscar cliente",
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        btntext.requestFocus();
+        return;
+    }
+
+    String criterio = jComboBox2.getSelectedItem().toString();
+
+    modeloTabla.setRowCount(0);
+
+    if (criterio.equals("Cédula")) {
+
+        Cliente cliente = controladorCliente.buscarCliente(texto);
+
+        if (cliente != null) {
+
+            agregarClienteTabla(cliente);
+
+        } else {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "No se encontró ningún cliente con esa cédula.",
+                    "Buscar cliente",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        }
+
+    } else {
+
+        ArrayList<Cliente> clientes =
+                controladorCliente.listarClientes();
+
+        boolean encontrado = false;
+
+        for (Cliente cliente : clientes) {
+
+            String dato = "";
+
+            if (criterio.equals("Nombre")) {
+                dato = cliente.getNombreCompleto();
+            }
+
+            if (criterio.equals("Teléfono")) {
+                dato = cliente.getTelefono();
+            }
+
+            if (criterio.equals("Correo")) {
+                dato = cliente.getCorreoElectronico();
+            }
+
+            if (dato.toLowerCase().contains(texto.toLowerCase())) {
+
+                agregarClienteTabla(cliente);
+                encontrado = true;
+            }
+        }
+
+        if (!encontrado) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "No se encontraron clientes.",
+                    "Buscar cliente",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        }
+    }
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        
+    btnBuscar.setText("");
+    btnBuscar.requestFocus();
+    }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+    }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
+       
+
+    int fila = jTable1.getSelectedRow();
+
+    if (fila == -1) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Seleccione un cliente de la tabla.",
+                "Seleccionar cliente",
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        return;
+    }
+
+    String cedula =
+            jTable1.getValueAt(fila, 0).toString();
+
+    Cliente cliente =
+            controladorCliente.buscarCliente(cedula);
+
+    if (cliente == null) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                "No se encontró el cliente.",
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+        );
+
+        return;
+    }
+
+    JOptionPane.showMessageDialog(
+            this,
+            "Cliente seleccionado:\n\n"
+            + "Cédula: " + cliente.getId()
+            + "\nNombre: " + cliente.getNombreCompleto()
+            + "\nTeléfono: " + cliente.getTelefono()
+            + "\nCorreo: " + cliente.getCorreoElectronico(),
+            "Cliente seleccionado",
+            JOptionPane.INFORMATION_MESSAGE
+    );
+    }//GEN-LAST:event_btnSeleccionarActionPerformed
 
     /**
      * @param args the command line arguments
