@@ -6,7 +6,7 @@ package vista;
 
 
 import controlador.ControladorPrincipal;
-import javax.swing.JOptionPane;
+
 
 /**
  *
