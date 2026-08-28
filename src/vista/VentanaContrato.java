@@ -636,7 +636,10 @@ public class VentanaContrato extends javax.swing.JFrame {
         
         LocalDate fechaInicio= convertirFecha(dcFechaInicio);
         LocalDate fechaFin= convertirFecha(dcFechaFin);
-        
+        if(!fechaFin.isAfter(fechaInicio)){
+           JOptionPane.showMessageDialog(this,"La fecha final debe ser posterior a la fecha inicial.");
+             return;
+}
         TipoEspacio tipo= TipoEspacio.valueOf(tipoTexto);
         
         try{
